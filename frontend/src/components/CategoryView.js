@@ -49,10 +49,6 @@ const mapStateToProps = ({ categories, postsByCategory, posts }, ownProps) => ({
   category: filterCategory(categories, ownProps.match.params.path)
 });
 
-const mapDispatchToProps = dispatch => ({
-  fetchCategoryPosts: data => dispatch(fetchCategoryPosts(data))
-});
-
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(CategoryView)
+  connect(mapStateToProps, {fetchCategoryPosts})(CategoryView)
 );

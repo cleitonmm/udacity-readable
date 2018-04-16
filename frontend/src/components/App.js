@@ -40,8 +40,4 @@ const mapStateToProps = ({ categories }) => ({
   categories
 });
 
-const mapDispatchToProps = dispatch => ({
-  fetchCategories: data => dispatch(fetchCategories(data))
-});
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+export default withRouter(connect(mapStateToProps, {fetchCategories})(App));
