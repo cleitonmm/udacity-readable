@@ -11,7 +11,7 @@ class CategoryView extends Component {
   };
 
   state = {
-    postsErr: null,
+    postsErr: null
   };
 
   componentDidUpdate() {
@@ -26,7 +26,7 @@ class CategoryView extends Component {
   }
 
   render() {
-    const { category } = this.props
+    const { category } = this.props;
     return (
       <div>
         <div>{category.name}</div>
@@ -36,7 +36,7 @@ class CategoryView extends Component {
   }
 }
 
-function mapStateToProps({ categories, postsByCategory, posts }, ownProps) {
+const mapStateToProps = ({ categories, postsByCategory, posts }, ownProps) => {
   let category = {};
   let postsId = [];
 
@@ -53,11 +53,9 @@ function mapStateToProps({ categories, postsByCategory, posts }, ownProps) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchCategoryPosts: data => dispatch(fetchCategoryPosts(data))
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  fetchCategoryPosts: data => dispatch(fetchCategoryPosts(data))
+});
 
 export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(CategoryView)

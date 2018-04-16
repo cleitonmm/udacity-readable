@@ -85,25 +85,23 @@ class PostsView extends Component {
   }
 }
 
-function mapStateToProps({ posts }, ownProps) {
+const mapStateToProps = ({ posts }, ownProps) => {
   let categoryFilter = {};
 
   if (ownProps.categoryFilter) {
     categoryFilter = ownProps.categoryFilter;
-  }  
+  }
 
   return {
     posts,
     categoryFilter
   };
-}
+};
 
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchPosts: data => dispatch(fetchPosts(data)),
-    fetchCategoryPosts: data => dispatch(fetchCategoryPosts(data))
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  fetchPosts: data => dispatch(fetchPosts(data)),
+  fetchCategoryPosts: data => dispatch(fetchCategoryPosts(data))
+});
 
 export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(PostsView)

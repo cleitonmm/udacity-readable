@@ -11,7 +11,7 @@ class App extends Component {
   };
 
   componentDidMount() {
-    if (Object.keys(this.props.categories).length ===0) {
+    if (Object.keys(this.props.categories).length === 0) {
       this.props.fetchCategories().catch(err =>
         this.setState({
           categoriesErr: "Ops... Ocorreu um erro ao carregar categorias!"
@@ -36,16 +36,12 @@ class App extends Component {
   }
 }
 
-function mapStateToProps({ categories }) {
-  return {
-    categories
-  };
-}
+const mapStateToProps = ({ categories }) => ({
+  categories
+});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchCategories: data => dispatch(fetchCategories(data))
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  fetchCategories: data => dispatch(fetchCategories(data))
+});
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

@@ -6,44 +6,34 @@ export const ADD_POST_CATEGORY = "ADD_POST_CATEGORY";
 export const ALL_CATEGORIES = "ALL_CATEGORIES";
 export const ALL_POSTS = "ALL_POSTS";
 
-export const addCategory = category => {
-  return {
-    type: ADD_CATEGORY,
-    ...category
-  };
-};
+export const addCategory = category => ({
+  type: ADD_CATEGORY,
+  ...category
+});
 
-export const addPost = post => {
-  return {
-    type: ADD_POST,
-    ...post
-  };
-};
+export const addPost = post => ({
+  type: ADD_POST,
+  ...post
+});
 
-export const addPostByCategory = (id, category) => {
-  return {
-    type: ADD_POST_CATEGORY,
-    id,
-    category
-  };
-};
+export const addPostByCategory = (id, category) => ({
+  type: ADD_POST_CATEGORY,
+  id,
+  category
+});
 
-export const allCategories = categories => {
-  return {
-    type: ALL_CATEGORIES,
-    categories: { ...categories }
-  };
-};
+export const allCategories = categories => ({
+  type: ALL_CATEGORIES,
+  categories: { ...categories }
+});
 
-export const allPosts = posts => {
-  return {
-    type: ALL_POSTS,
-    posts: { ...posts }
-  };
-};
+export const allPosts = posts => ({
+  type: ALL_POSTS,
+  posts: { ...posts }
+});
 
-export const fetchCategories = () => dispatch => {
-  return getCategories().then(categories => {
+export const fetchCategories = () => dispatch =>
+  getCategories().then(categories => {
     categories.reduce((cats, cat) => {
       cats = {
         ...cats,
@@ -56,15 +46,12 @@ export const fetchCategories = () => dispatch => {
 
     dispatch(allCategories(categories));
   });
-};
 
-export const fetchPosts = () => dispatch => {
-  return getPosts().then(posts => handlePosts(posts, dispatch));
-};
+export const fetchPosts = () => dispatch =>
+  getPosts().then(posts => handlePosts(posts, dispatch));
 
-export const fetchCategoryPosts = category => dispatch => {
-  return getCategoryPosts(category).then(posts => handlePosts(posts, dispatch));
-};
+export const fetchCategoryPosts = category => dispatch =>
+  getCategoryPosts(category).then(posts => handlePosts(posts, dispatch));
 
 const handlePosts = (posts, dispatch) => {
   if (posts.length !== 0) {

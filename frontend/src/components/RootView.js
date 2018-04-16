@@ -48,10 +48,8 @@ class RootView extends Component {
   }
 }
 
-function mapStateToProps({ categories }) {
-  return {
+const mapStateToProps = ({ categories }) => ({
     categories
-  };
-}
+})
 
 export default connect(mapStateToProps, null)(RootView);
