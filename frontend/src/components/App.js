@@ -27,7 +27,7 @@ class App extends Component {
       return (
         <div className="app">
           <Switch>
-            <Route exact path="/" render={() => <RootView />} />
+            <Route exact path="/" component={RootView} />
             <Route path="/category/:path" component={CategoryView} />
           </Switch>
         </div>

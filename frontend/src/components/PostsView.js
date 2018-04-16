@@ -7,42 +7,61 @@ import { withRouter } from "react-router-dom";
 
 class PostsView extends Component {
   static propTypes = {
-    posts: PropTypes.object.isRequired,
-    categoryFilter: PropTypes.object.isRequired
+    categoryFilter: PropTypes.string
+  };
+
+  static defaultProps = {
+    categoryFilter: ""
   };
 
   state = {
     postsErr: null,
-    orderedPosts: []
+    orderedPosts: [],
+    loading: true
   };
 
   componentDidMount() {
     const { fetchCategoryPosts, fetchPosts, categoryFilter } = this.props;
 
-    if (Object.keys(categoryFilter).length !== 0) {
-      fetchCategoryPosts(categoryFilter.name).catch(err => {
-        console.log(err);
-        this.setState({
-          postsErr: "Ops... Ocorreu um erro ao carregar postagens!"
+    if (categoryFilter.length !== 0) {
+      fetchCategoryPosts(categoryFilter)
+        .then(posts =>
+          this.setState({
+            orderedPosts: this.orderPosts(undefined, undefined, posts),
+            loading: false
+          })
+        )
+        .catch(err => {
+          console.log(err);
+          this.setState({
+            postsErr: "Ops... Ocorreu um erro ao carregar postagens!"
+          });
         });
-      });
     } else {
-      fetchPosts().catch(err => {
-        console.log(err);
-        this.setState({
-          postsErr: "Ops... Ocorreu um erro ao carregar postagens!"
+      fetchPosts()
+        .then(posts =>
+          this.setState({
+            orderedPosts: this.orderPosts(undefined, undefined, posts),
+            loading: false
+          })
+        )
+        .catch(err => {
+          console.log(err);
+          this.setState({
+            postsErr: "Ops... Ocorreu um erro ao carregar postagens!"
+          });
         });
-      });
     }
   }
 
-  orderPosts = (field = "votescore", ascDesc = "desc") => {
-    const { posts } = this.props;
-
-    let postsKeys = Object.keys(posts);
+  orderPosts = (
+    field = "votescore",
+    ascDesc = "desc",
+    posts = this.state.orderedPosts
+  ) => {
     let orderedPosts = [];
-    if (postsKeys.length !== 0) {
-      orderedPosts = postsKeys.map(id => posts[id]).sort((a, b) => {
+    if (posts.length !== 0) {
+      orderedPosts = posts.sort((a, b) => {
         return ascDesc === "desc" ? b[field] > a[field] : a[field] > b[field];
       });
     }
@@ -56,7 +75,7 @@ class PostsView extends Component {
   };
 
   render() {
-    let { orderedPosts } = this.state;
+    let { orderedPosts, loading } = this.state;
     if (orderedPosts.length === 0) orderedPosts = this.orderPosts();
 
     return (
@@ -67,14 +86,20 @@ class PostsView extends Component {
           <button onClick={e => this.handleOrder("votescore")}>Votação</button>
           <button onClick={e => this.handleOrder("timestamp")}>Data</button>
         </div>
-        {orderedPosts.length !== 0 ? (
-          <ul>
-            {orderedPosts.map(post => (
-              <li key={post.id}>
-                <Post post={post} />
-              </li>
-            ))}
-          </ul>
+        {!loading ? (
+          orderedPosts.length === 0 ? (
+            <div>
+              Essa categoria ainda não possui postagens.
+            </div>
+          ) : (
+            <ul>
+              {orderedPosts.map(post => (
+                <li key={post.id}>
+                  <Post post={post} />
+                </li>
+              ))}
+            </ul>
+          )
         ) : (
           <div>
             {this.state.postsErr ? this.state.postsErr : "Carregando..."}
@@ -85,18 +110,10 @@ class PostsView extends Component {
   }
 }
 
-const mapStateToProps = ({ posts }, ownProps) => {
-  let categoryFilter = {};
-
-  if (ownProps.categoryFilter) {
-    categoryFilter = ownProps.categoryFilter;
-  }
-
-  return {
-    posts,
-    categoryFilter
-  };
-};
+const mapStateToProps = ({ posts }, { categoryFilter }) => ({
+  posts,
+  categoryFilter
+});
 
 const mapDispatchToProps = dispatch => ({
   fetchPosts: data => dispatch(fetchPosts(data)),

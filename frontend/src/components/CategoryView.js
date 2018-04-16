@@ -14,44 +14,40 @@ class CategoryView extends Component {
     postsErr: null
   };
 
-  componentDidUpdate() {
-    if (this.props.category) {
-      this.props.fetchCategoryPosts(this.props.category.name).catch(err => {
-        console.log(err);
-        this.setState({
-          postsErr: "Ops... Ocorreu um erro ao carregar postagens!"
-        });
-      });
-    }
-  }
-
   render() {
     const { category } = this.props;
     return (
       <div>
-        <div>{category.name}</div>
-        <PostsView category={category} />
+        {Object.keys(category).length !== 0 ? (
+          <div>
+            <div>{category.name}</div>
+            <PostsView categoryFilter={category.path} />
+          </div>
+        ) : (
+          <div>Carregando...</div>
+        )}
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ categories, postsByCategory, posts }, ownProps) => {
+const filterCategory = (categories, path) => {
   let category = {};
-  let postsId = [];
 
-  if (ownProps.match) {
+  if (path) {
     Object.keys(categories).map(id => {
-      if (categories[id].path === ownProps.match.params.path) {
+      if (categories[id].path === path) {
         category = categories[id];
       }
     });
-  } else if (ownProps.category) category = ownProps.category;
+  }
 
-  return {
-    category
-  };
-}
+  return category;
+};
+
+const mapStateToProps = ({ categories, postsByCategory, posts }, ownProps) => ({
+  category: filterCategory(categories, ownProps.match.params.path)
+});
 
 const mapDispatchToProps = dispatch => ({
   fetchCategoryPosts: data => dispatch(fetchCategoryPosts(data))

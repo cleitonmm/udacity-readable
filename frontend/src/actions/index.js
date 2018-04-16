@@ -45,6 +45,8 @@ export const fetchCategories = () => dispatch =>
     });
 
     dispatch(allCategories(categories));
+
+    return categories;
   });
 
 export const fetchPosts = () => dispatch =>
@@ -67,4 +69,6 @@ const handlePosts = (posts, dispatch) => {
 
     dispatch(allPosts(posts));
   }
+
+  return posts;
 };
