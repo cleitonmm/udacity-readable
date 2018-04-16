@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Post from "./Post";
-import { fetchPosts } from "../actions";
+import { fetchPosts, fetchCategoryPosts } from "../actions";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
 class PostsView extends Component {
   static propTypes = {
-    posts: PropTypes.object.isRequired
+    posts: PropTypes.object.isRequired,
+    categoryFilter: PropTypes.object.isRequired
   };
 
   state = {
@@ -15,11 +17,23 @@ class PostsView extends Component {
   };
 
   componentDidMount() {
-    this.props.fetchPosts().catch(err =>
-      this.setState({
-        postsErr: "Ops... Ocorreu um erro ao carregar postagens!"
-      })
-    );
+    const { fetchCategoryPosts, fetchPosts, categoryFilter } = this.props;
+
+    if (Object.keys(categoryFilter).length !== 0) {
+      fetchCategoryPosts(categoryFilter.name).catch(err => {
+        console.log(err);
+        this.setState({
+          postsErr: "Ops... Ocorreu um erro ao carregar postagens!"
+        });
+      });
+    } else {
+      fetchPosts().catch(err => {
+        console.log(err);
+        this.setState({
+          postsErr: "Ops... Ocorreu um erro ao carregar postagens!"
+        });
+      });
+    }
   }
 
   orderPosts = (field = "votescore", ascDesc = "desc") => {
@@ -71,16 +85,26 @@ class PostsView extends Component {
   }
 }
 
-function mapStateToProps({ posts }) {
+function mapStateToProps({ posts }, ownProps) {
+  let categoryFilter = {};
+
+  if (ownProps.categoryFilter) {
+    categoryFilter = ownProps.categoryFilter;
+  }  
+
   return {
-    posts
+    posts,
+    categoryFilter
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchPosts: data => dispatch(fetchPosts(data))
+    fetchPosts: data => dispatch(fetchPosts(data)),
+    fetchCategoryPosts: data => dispatch(fetchCategoryPosts(data))
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostsView);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(PostsView)
+);

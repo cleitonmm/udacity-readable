@@ -10,3 +10,8 @@ export function getPosts() {
   return fetch("http://localhost:3001/posts", HEADER)
     .then(res => res.json())
 }
+
+export function getCategoryPosts(category) {
+  return fetch(`http://localhost:3001/${category}/posts`, HEADER)
+    .then(res => res.json())
+}
