@@ -74,3 +74,19 @@ export default combineReducers({
   categories,
   posts,
 });
+
+// Selectors 
+export const filterCategory = (state, path) => {
+  const { categories } = state;
+  let category = {}
+
+  if (path) {
+    Object.keys(categories).map(id => {
+      if (categories[id].path === path) {
+        category = categories[id];
+      }
+    });
+  }
+
+  return category;
+};

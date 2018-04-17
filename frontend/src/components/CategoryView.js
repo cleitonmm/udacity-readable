@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { fetchCategoryPosts } from "../actions";
 import { withRouter } from "react-router-dom";
 import PostsView from "./PostsView";
+import { filterCategory } from '../reducers'
 
 class CategoryView extends Component {
   static propTypes = {
@@ -31,22 +32,8 @@ class CategoryView extends Component {
   }
 }
 
-const filterCategory = (categories, path) => {
-  let category = {};
-
-  if (path) {
-    Object.keys(categories).map(id => {
-      if (categories[id].path === path) {
-        category = categories[id];
-      }
-    });
-  }
-
-  return category;
-};
-
-const mapStateToProps = ({ categories, postsByCategory, posts }, ownProps) => ({
-  category: filterCategory(categories, ownProps.match.params.path)
+const mapStateToProps = (state, ownProps) => ({
+  category: filterCategory(state, ownProps.match.params.path)
 });
 
 export default withRouter(
