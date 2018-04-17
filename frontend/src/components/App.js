@@ -4,19 +4,26 @@ import CategoryView from "./CategoryView";
 import { Route, Switch, withRouter } from "react-router-dom";
 import { fetchCategories } from "../actions";
 import { connect } from "react-redux";
+import { filterCategory } from "../reducers";
+import PropTypes from "prop-types";
 
 class App extends Component {
+  static propTypes = {
+    categories: PropTypes.array.isRequired
+  };
+
   state = {
     categoriesErr: null
   };
 
   componentDidMount() {
-    if (Object.keys(this.props.categories).length === 0) {
-      this.props.fetchCategories().catch(err =>
+    if (this.props.categories.length === 0) {
+      this.props.fetchCategories().catch(err => {
+        console.log(err);
         this.setState({
           categoriesErr: "Ops... Ocorreu um erro ao carregar categorias!"
-        })
-      );
+        });
+      });
     }
   }
 
@@ -36,8 +43,8 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ categories }) => ({
-  categories
+const mapStateToProps = state => ({
+  categories: filterCategory(state)
 });
 
-export default withRouter(connect(mapStateToProps, {fetchCategories})(App));
+export default withRouter(connect(mapStateToProps, { fetchCategories })(App));

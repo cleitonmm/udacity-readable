@@ -4,14 +4,11 @@ import Post from "./Post";
 import { fetchPosts, fetchCategoryPosts } from "../actions";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import { filterPost } from "../reducers";
 
 class PostsView extends Component {
   static propTypes = {
-    categoryFilter: PropTypes.string
-  };
-
-  static defaultProps = {
-    categoryFilter: ""
+    posts: PropTypes.array.isRequired
   };
 
   state = {
@@ -20,14 +17,15 @@ class PostsView extends Component {
     loading: true
   };
 
-  componentDidMount() {
-    const { fetchCategoryPosts, fetchPosts, categoryFilter } = this.props;
+  
 
-    if (categoryFilter.length !== 0) {
+  componentDidMount() {
+    const { fetchCategoryPosts, fetchPosts, posts, categoryFilter } = this.props;
+
+    if (categoryFilter) {
       fetchCategoryPosts(categoryFilter)
         .then(posts =>
           this.setState({
-            orderedPosts: this.orderPosts(undefined, undefined, posts),
             loading: false
           })
         )
@@ -41,7 +39,6 @@ class PostsView extends Component {
       fetchPosts()
         .then(posts =>
           this.setState({
-            orderedPosts: this.orderPosts(undefined, undefined, posts),
             loading: false
           })
         )
@@ -57,7 +54,7 @@ class PostsView extends Component {
   orderPosts = (
     field = "votescore",
     ascDesc = "desc",
-    posts = this.state.orderedPosts
+    posts = this.props.posts
   ) => {
     let orderedPosts = [];
     if (posts.length !== 0) {
@@ -110,8 +107,8 @@ class PostsView extends Component {
   }
 }
 
-const mapStateToProps = ({ posts }, { categoryFilter }) => ({
-  posts,
+const mapStateToProps = (state, { categoryFilter }) => ({
+  posts: filterPost(state, categoryFilter),
   categoryFilter
 });
 

@@ -16,12 +16,6 @@ export const addPost = post => ({
   ...post
 });
 
-export const addPostByCategory = (id, category) => ({
-  type: ADD_POST_CATEGORY,
-  id,
-  category
-});
-
 export const allCategories = categories => ({
   type: ALL_CATEGORIES,
   categories: { ...categories }
@@ -34,7 +28,7 @@ export const allPosts = posts => ({
 
 export const fetchCategories = () => dispatch =>
   getCategories().then(categories => {
-    categories.reduce((cats, cat) => {
+    categories = categories.reduce((cats, cat) => {
       cats = {
         ...cats,
         [cat.name]: {
@@ -42,7 +36,7 @@ export const fetchCategories = () => dispatch =>
         }
       };
       return cats;
-    });
+    }, {});
 
     dispatch(allCategories(categories));
 
@@ -57,7 +51,7 @@ export const fetchCategoryPosts = category => dispatch =>
 
 const handlePosts = (posts, dispatch) => {
   if (posts.length !== 0) {
-    posts.reduce((posts, post) => {
+    posts = posts.reduce((posts, post) => {
       posts = {
         ...posts,
         [post.id]: {
@@ -65,7 +59,7 @@ const handlePosts = (posts, dispatch) => {
         }
       };
       return posts;
-    });
+    }, {});
 
     dispatch(allPosts(posts));
   }
