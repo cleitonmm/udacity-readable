@@ -20,7 +20,7 @@ class PostsView extends Component {
   
 
   componentDidMount() {
-    const { fetchCategoryPosts, fetchPosts, posts, categoryFilter } = this.props;
+    const { fetchCategoryPosts, fetchPosts, categoryFilter } = this.props;
 
     if (categoryFilter) {
       fetchCategoryPosts(categoryFilter)
