@@ -1,10 +1,15 @@
-import { ADD_CATEGORY, RECEIVE_CATEGORY, FETCH_CATEGORY, FETCH_CATEGORY_ERROR } from "../actions";
+import {
+  ADD_CATEGORY,
+  FETCH_CATEGORY_SUCCESS,
+  FETCH_CATEGORY,
+  FETCH_CATEGORY_ERROR
+} from "../actions";
 import { combineReducers } from "redux";
 
 const byIds = (state = {}, action) => {
   switch (action.type) {
     case ADD_CATEGORY:
-    case RECEIVE_CATEGORY:
+    case FETCH_CATEGORY_SUCCESS:
       const nextState = { ...state };
       action.categories.forEach(category => {
         nextState[category.path] = category;
@@ -15,38 +20,41 @@ const byIds = (state = {}, action) => {
   }
 };
 
-const controller = (state = {}, action) => {
-  const { error } = action;
+const isFetching = (state = false, action) => {
   switch (action.type) {
     case FETCH_CATEGORY:
-      return {
-        isFetching: true,
-        error
-      };
-    case RECEIVE_CATEGORY:
-      return {
-        isFetching: false,
-        error
-      };
+      return true;
     case FETCH_CATEGORY_ERROR:
-      return {
-        isFetching: false,
-        error
-      };
+    case FETCH_CATEGORY_SUCCESS:
+      return false;
     default:
       return state;
   }
 };
 
-export default combineReducers({byIds, controller});
+const errorMessage = (state = null, action) => {
+  switch (action.type) {
+    case FETCH_CATEGORY:
+    case FETCH_CATEGORY_SUCCESS:
+      return null;
+    case FETCH_CATEGORY_ERROR:
+      return action.error || "Erro indefinido ao carregar categorias.";
+    default:
+      return state;
+  }
+};
+
+export default combineReducers({ byIds, isFetching, errorMessage });
 
 export const allIds = state => Object.keys(state.categories.byIds);
 
-export const isFetchingCategories = state => state.categories.controller.isFetching;
+export const isFetchingCategories = state =>
+  state.categories.isFetching;
 
-export const getCategoriesError = state => state.categories.controller.error;
+export const getCategoriesError = state => state.categories.errorMessage;
 
-const getAllCategories = state => allIds(state).map(id => state.categories.byIds[id]);
+const getAllCategories = state =>
+  allIds(state).map(id => state.categories.byIds[id]);
 
 export const filterCategory = (state, path) => {
   let categories = getAllCategories(state);
