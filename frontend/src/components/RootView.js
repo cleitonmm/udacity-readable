@@ -3,51 +3,64 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import PostsView from "./PostsView";
-import { filterCategory } from "../reducers";
+import {
+  filterCategory,
+  isFetchingCategories,
+  getCategoriesError
+} from "../reducers";
 
 class RootView extends Component {
   static propTypes = {
-    categories: PropTypes.array.isRequired
+    categories: PropTypes.array.isRequired,
+    isFetching: PropTypes.bool,
+    fetchError: PropTypes.object
   };
 
-  state = {
-    categoriesErr: null
-  };
+  static defaultProps = {
+    isFetching: false,
+  }
 
   render() {
-    const { categories } = this.props;
+    const { categories, isFetching, fetchError } = this.props;
     return (
       <div className="root-view">
-        <div className="categories">
-          <h1>Categorias</h1>
-          {categories.length !== 0 ? (
-            <ul>
-              {categories.map(cat => (
-                <li key={cat.name}>
-                  <Link
-                    to={{
-                      pathname: `/category/${cat.path}`
-                    }}
-                  >
-                    <div>{cat.name}</div>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+        {!isFetching ? (
+          !fetchError ? (
+            <div className="categories">
+              <h1>Categorias</h1>
+              <ul>
+                {categories.map(cat => (
+                  <li key={cat.name}>
+                    <Link
+                      to={{
+                        pathname: `/category/${cat.path}`
+                      }}
+                    >
+                      <div>{cat.name}</div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <PostsView />
+            </div>
           ) : (
             <div>
-              {this.state.postsErr ? this.state.categoriesErr : "Carregando..."}
+              <span>Ops... ocorreu um erro ao buscar informações.</span>
+              {console.log(fetchError)}
             </div>
-          )}
-        </div>
-        <PostsView />
+          )
+        ) : (
+          <div>Carregando...</div>
+        )}
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
-  categories: filterCategory(state)
+const mapStateToProps = state => ({
+  categories: filterCategory(state),
+  isFetching: isFetchingCategories(state),
+  fetchError: getCategoriesError(state)
 });
 
 export default connect(mapStateToProps)(RootView);

@@ -11,10 +11,6 @@ class CategoryView extends Component {
     category: PropTypes.array.isRequired
   };
 
-  state = {
-    postsErr: null
-  };
-
   render() {
     const { category } = this.props;
     return (
