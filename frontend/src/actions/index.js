@@ -1,5 +1,7 @@
 import { getCategories, getPosts, getCategoryPosts } from "../utils/api";
 import { isFetchingCategories, isFetchingPosts } from "../reducers";
+import * as schema from "./schemas";
+import { normalize } from "normalizr";
 
 export const FETCH_CATEGORY_SUCCESS = "FETCH_CATEGORY_SUCCESS";
 export const FETCH_CATEGORY = "FETCH_CATEGORY";
@@ -13,7 +15,7 @@ export const FETCH_POST_ERROR = "FETCH_POST_ERROR";
 
 const fetchPostSuccess = posts => ({
   type: FETCH_POST_SUCCESS,
-  posts: [...posts]
+  posts: normalize(posts, schema.posts)
 });
 
 export const fetchCategories = () => (dispatch, getState) => {
@@ -27,7 +29,7 @@ export const fetchCategories = () => (dispatch, getState) => {
     categories =>
       dispatch({
         type: FETCH_CATEGORY_SUCCESS,
-        categories: [...categories]
+        categories: normalize(categories, schema.categories)
       }),
     error =>
       dispatch({

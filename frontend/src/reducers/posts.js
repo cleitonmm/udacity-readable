@@ -7,17 +7,14 @@ import {
 import { combineReducers } from "redux";
 
 const byIds = (state = {}, action) => {
-  switch (action.type) {
-    case ADD_POST:
-    case FETCH_POST_SUCCESS:
-      const nextState = { ...state };
-      action.posts.forEach(post => {
-        nextState[post.id] = post;
-      });
-      return nextState;
-    default:
-      return state;
+  if (action.posts) {
+    return {
+      ...state,
+      ...action.posts.entities.post
+    };
   }
+
+  return state;
 };
 
 const isFetching = (state = false, action) => {
@@ -46,9 +43,8 @@ const errorMessage = (state = null, action) => {
 
 export default combineReducers({ byIds, isFetching, errorMessage });
 
-const getAllPosts = state => allIds(state).map(id => state.posts.byIds[id]);
-
-export const allIds = state => Object.keys(state.posts.byIds);
+const getAllPosts = state =>
+  Object.keys(state.posts.byIds).map(id => state.posts.byIds[id]);
 
 export const isFetchingPosts = state => state.posts.isFetching;
 

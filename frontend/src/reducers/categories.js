@@ -7,17 +7,14 @@ import {
 import { combineReducers } from "redux";
 
 const byIds = (state = {}, action) => {
-  switch (action.type) {
-    case ADD_CATEGORY:
-    case FETCH_CATEGORY_SUCCESS:
-      const nextState = { ...state };
-      action.categories.forEach(category => {
-        nextState[category.path] = category;
-      });
-      return nextState;
-    default:
-      return state;
+  if (action.categories) {
+    return {
+      ...state,
+      ...action.categories.entities.category
+    };
   }
+
+  return state;
 };
 
 const isFetching = (state = false, action) => {
@@ -46,15 +43,12 @@ const errorMessage = (state = null, action) => {
 
 export default combineReducers({ byIds, isFetching, errorMessage });
 
-export const allIds = state => Object.keys(state.categories.byIds);
-
-export const isFetchingCategories = state =>
-  state.categories.isFetching;
+export const isFetchingCategories = state => state.categories.isFetching;
 
 export const getCategoriesError = state => state.categories.errorMessage;
 
 const getAllCategories = state =>
-  allIds(state).map(id => state.categories.byIds[id]);
+  Object.keys(state.categories.byIds).map(id => state.categories.byIds[id]);
 
 export const filterCategory = (state, path) => {
   let categories = getAllCategories(state);
