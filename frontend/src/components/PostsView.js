@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import Post from "./Post";
+import PostPreview from "./PostPreview";
 import { fetchPosts, fetchCategoryPosts } from "../actions";
 import * as reducers from "../reducers";
 import { connect } from "react-redux";
@@ -22,7 +22,7 @@ class PostsView extends Component {
     orderedPosts: []
   };
 
-  componentDidMount() {
+  componentWillMount() {
     const { fetchCategoryPosts, fetchPosts, categoryFilter } = this.props;
 
     categoryFilter ? fetchCategoryPosts(categoryFilter) : fetchPosts();
@@ -70,7 +70,7 @@ class PostsView extends Component {
               <ul>
                 {orderedPosts.map(post => (
                   <li key={post.id}>
-                    <Post post={post} />
+                    <PostPreview post={post} />
                   </li>
                 ))}
               </ul>

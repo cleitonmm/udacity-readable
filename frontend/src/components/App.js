@@ -1,17 +1,19 @@
 import React, { Component } from "react";
 import RootView from "./RootView";
-import CategoryView from "./CategoryView";
+import CategoriesView from "./CategoriesView";
+import Post from "./Post";
 import { Route, Switch, withRouter } from "react-router-dom";
 import { fetchCategories } from "../actions";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 class App extends Component {
   static propTypes = {
     fetchCategories: PropTypes.func.isRequired
   };
 
-  componentDidMount() {
+  componentWillMount() {
     this.props.fetchCategories();
   }
 
@@ -20,7 +22,8 @@ class App extends Component {
       <div className="app">
         <Switch>
           <Route exact path="/" component={RootView} />
-          <Route path="/category/:path" component={CategoryView} />
+          <Route path="/category/:path" component={CategoriesView} />
+          <Route path="/post/:id" component={Post} />
         </Switch>
       </div>
     );

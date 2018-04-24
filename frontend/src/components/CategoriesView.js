@@ -6,7 +6,7 @@ import { withRouter } from "react-router-dom";
 import PostsView from "./PostsView";
 import { filterCategory } from "../reducers";
 
-class CategoryView extends Component {
+class CategoriesView extends Component {
   static propTypes = {
     category: PropTypes.array.isRequired
   };
@@ -35,5 +35,5 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 export default withRouter(
-  connect(mapStateToProps, { fetchCategoryPosts })(CategoryView)
+  connect(mapStateToProps, { fetchCategoryPosts })(CategoriesView)
 );
