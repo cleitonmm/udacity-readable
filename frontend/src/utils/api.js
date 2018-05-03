@@ -49,3 +49,52 @@ export function postCommentVote(id, vote) {
     })
   }).then(res => res.json());
 }
+
+export function putComment(id, body) {
+  const timestamp = Date.now();
+
+  return fetch(`http://localhost:3001/comments/${id}`, {
+    method: "PUT",
+    headers: HEADER.headers,
+    body: JSON.stringify({
+      timestamp,
+      body
+    })
+  }).then(res => res.json());
+}
+
+export function deleteComment(id) {
+  console.log(id, "DELETE")
+  return fetch(`http://localhost:3001/comments/${id}`, {
+    method: "DELETE",
+    headers: HEADER.headers
+  }).then(res => res.json());
+}
+
+export function postComment(comment) {
+  const { body, author, parentId } = comment;
+
+  const id = uuidv4();
+  const timestamp = Date.now();
+
+  return fetch(`http://localhost:3001/comments`, {
+    method: "POST",
+    headers: HEADER.headers,
+    body: JSON.stringify({
+      id,
+      timestamp,
+      body,
+      author,
+      parentId
+    })
+  }).then(res => res.json());
+}
+
+function uuidv4() {
+  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+    (
+      c ^
+      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
+    ).toString(16)
+  );
+}

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { vote } from "../actions";
-import * as FontAwesome from "react-icons/lib/fa";
+import { FaThumbsODown, FaThumbsOUp } from "react-icons/lib/fa";
 
 class VoteScore extends Component {
   static propTypes = {
@@ -22,7 +22,6 @@ class VoteScore extends Component {
 
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    console.log(nextProps);
     if (prevState.score === undefined)
       return {
         score: nextProps.score,
@@ -59,7 +58,7 @@ class VoteScore extends Component {
 
     color += " font-weight-bold p-0 mr-1";
     return (
-      <footer className="text-right p-0 m-0 mb-1">
+      <div>
         <div className={color} style={{width: "20px", display: "inline-block"}}>{score}</div>
         <button
           type="button"
@@ -67,7 +66,7 @@ class VoteScore extends Component {
           disabled={isManipulating}
           onClick={e => this.handleVote("upVote")}
         >
-          <FontAwesome.FaThumbsOUp size={20} />
+          <FaThumbsOUp size={20} />
         </button>
         <button
           type="button"
@@ -75,9 +74,9 @@ class VoteScore extends Component {
           disabled={isManipulating}
           onClick={e => this.handleVote("downVote")}
         >
-          <FontAwesome.FaThumbsODown size={20} />
+          <FaThumbsODown size={20} />
         </button>
-      </footer>
+      </div>
     );
   }
 }

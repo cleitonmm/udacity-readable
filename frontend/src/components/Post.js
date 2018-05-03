@@ -28,7 +28,12 @@ class Post extends Component {
       <div>
         {!isFetching ? (
           <div>
-            <h3>{post.title}</h3> <CommentsView postId={post.id}/>
+            <h3>{post.title}</h3> 
+            <p>{post.body}</p>
+            <footer>{post.author}</footer> 
+            
+            
+            <CommentsView postId={post.id}/>
           </div>
         ) : (
           <span>Carregando...</span>

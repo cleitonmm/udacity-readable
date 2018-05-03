@@ -5,7 +5,10 @@ import {
   getPost,
   getPostComments,
   getComment,
-  postCommentVote
+  postCommentVote,
+  putComment,
+  deleteComment,
+  postComment
 } from "../utils/api";
 import {
   isFetchingCategories,
@@ -35,6 +38,7 @@ export const MANIPULATE_COMMENT = "MANIPULATE_COMMENT";
 export const MANIPULATE_COMMENT_ERROR = "MANIPULATE_COMMENT_ERROR";
 export const MANIPULATE_COMMENT_SUCCESS = "MANIPULATE_COMMENT_SUCCESS";
 export const VOTE_COMMENT = "VOTE_COMMENT";
+export const OPEN_COMMENT_MODAL = "OPEN_COMMENT_MODAL";
 
 const IS_FETCHING_POST_MESSAGE =
   "Já há uma requisição de postagens em andamento.";
@@ -182,4 +186,92 @@ export const voteComment = (id, option) => (dispatch, getState) => {
 
 export const vote = (id, option, type) => (dispatch, getState) => {
   if (type === VOTE_COMMENT) return voteComment(id, option)(dispatch, getState);
+};
+
+export const editComment = (id, body) => (dispatch, getState) => {
+  if (isManipulatingComment(getState(), id)) {
+    console.log(IS_MANIPULATING_COMMENT_MESSAGE, `CommentId: ${id}`);
+    return Promise.resolve();
+  }
+
+  const comment = filterComments(getState(), undefined, id);
+
+  dispatch({ type: MANIPULATE_COMMENT, comment });
+
+  return putComment(id, body).then(
+    res => {
+      dispatch({ type: MANIPULATE_COMMENT_SUCCESS, comment });
+      dispatch(fetchComment(id));
+    },
+    error => {
+      dispatch({
+        type: MANIPULATE_COMMENT_ERROR,
+        comment,
+        error: error.message
+      });
+    }
+  );
+};
+
+export const delComment = id => (dispatch, getState) => {
+  if (isManipulatingComment(getState(), id)) {
+    console.log(IS_MANIPULATING_COMMENT_MESSAGE, `CommentId: ${id}`);
+    return Promise.resolve();
+  }
+
+  const comment = filterComments(getState(), undefined, id);
+
+  dispatch({ type: MANIPULATE_COMMENT, comment });
+
+  return deleteComment(id).then(
+    res => {
+      dispatch({ type: MANIPULATE_COMMENT_SUCCESS, comment });
+      dispatch(fetchPostComments(comment.parentId));
+    },
+    error => {
+      dispatch({
+        type: MANIPULATE_COMMENT_ERROR,
+        comment,
+        error: error.message
+      });
+    }
+  );
+};
+
+export const addComment = comment => (dispatch, getState) => {
+  if (isFetchingComments(getState())) {
+    console.log(IS_MANIPULATING_COMMENT_MESSAGE);
+    return Promise.resolve();
+  }
+
+  dispatch({ type: FETCH_COMMENT });
+
+  return postComment(comment).then(
+    res => {
+      dispatch({ type: FETCH_COMMENT_SUCCESS });
+      openCommentModal()(dispatch);
+      dispatch(fetchPostComments(comment.parentId));
+    },
+    error => {
+      dispatch({
+        type: FETCH_COMMENT_ERROR,
+        error: error.message
+      });
+    }
+  );
+};
+
+export const openCommentModal = (
+  comment = null,
+  openCommentEdit = false,
+  openCommentDelete = false,
+  openCommentAdd = false
+) => dispatch => {
+  dispatch({
+    type: OPEN_COMMENT_MODAL,
+    comment,
+    openCommentEdit,
+    openCommentDelete,
+    openCommentAdd
+  });
 };

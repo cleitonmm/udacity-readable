@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { fetchPostComments } from "../actions";
+import { fetchPostComments, openCommentModal } from "../actions";
 import { filterComments, isFetchingComments } from "../reducers";
 import Comment from "./Comment";
+import CommentCreator from "./CommentCreator";
 
 class CommentsView extends Component {
   static propTypes = {
@@ -38,23 +39,38 @@ class CommentsView extends Component {
     return orderedComments;
   };
 
+  addComment = () => {
+    this.props.openCommentModal(undefined, undefined, undefined, true);
+  };
+
   render() {
-    const { isFetching } = this.props;
+    const { isFetching, openCommentAdd, postId } = this.props;
     let { orderedComments } = this.state;
 
     if (orderedComments.length === 0) orderedComments = this.orderComments();
 
     return (
       <div>
-        {!isFetching && orderedComments.length !== 0 ? (
-          <div className="card-group">
-            {orderedComments.map(comment => (
+        <button
+          className="btn btn-outline-primary"
+          onClick={() => this.addComment()}
+        >
+          Add Comment
+        </button>
+        {!isFetching ? (
+          orderedComments.length !== 0 ? (
+            <div className="card-group">
+              {orderedComments.map(comment => (
                 <Comment key={comment.id} comment={comment} />
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div>No comments yet.</div>
+          )
         ) : (
           <div>Carregando...</div>
         )}
+        {openCommentAdd && <CommentCreator type="ADD" postId={postId} />}
       </div>
     );
   }
@@ -63,9 +79,12 @@ class CommentsView extends Component {
 const mapStateToProps = (state, { postId }) => ({
   postId,
   comments: filterComments(state, postId),
-  isFetching: isFetchingComments(state)
+  isFetching: isFetchingComments(state),
+  openCommentAdd: state.comments.openCommentAdd
 });
 
 export default withRouter(
-  connect(mapStateToProps, { fetchPostComments })(CommentsView)
+  connect(mapStateToProps, { fetchPostComments, openCommentModal })(
+    CommentsView
+  )
 );

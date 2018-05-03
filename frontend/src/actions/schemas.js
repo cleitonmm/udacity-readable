@@ -16,6 +16,6 @@ export const categories = [category];
 export const comment = new schema.Entity(
   "comment",
   {},
-  { processStrategy: entity => ({ ...entity, isManipulating: false, errorMessage: null }) }
+  { processStrategy: entity => ({ ...entity, isManipulating: false, errorMessage: null, openCommentEdit: false, openCommentDelete: false }) }
 );
 export const comments = [comment];
