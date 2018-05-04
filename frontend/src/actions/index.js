@@ -8,14 +8,17 @@ import {
   postCommentVote,
   putComment,
   deleteComment,
-  postComment
+  postComment,
+  postPostVote
 } from "../utils/api";
 import {
   isFetchingCategories,
   isFetchingPosts,
   isFetchingComments,
   isManipulatingComment,
-  filterComments
+  filterComments,
+  isManipulatingPost,
+  filterPost
 } from "../reducers";
 import * as schema from "./schemas";
 import { normalize } from "normalizr";
@@ -29,6 +32,11 @@ export const FETCH_POST_SUCCESS = "FETCH_POST_SUCCESS";
 export const FETCH_POST = "FETCH_POST";
 export const ADD_POST = "ADD_POST";
 export const FETCH_POST_ERROR = "FETCH_POST_ERROR";
+export const MANIPULATE_POST = "MANIPULATE_POST";
+export const MANIPULATE_POST_ERROR = "MANIPULATE_POST_ERROR";
+export const MANIPULATE_POST_SUCCESS = "MANIPULATE_POST_SUCCESS";
+export const VOTE_POST = "VOTE_POST";
+export const OPEN_POST_MODAL = "OPEN_POST_MODAL";
 
 export const FETCH_COMMENT_SUCCESS = "FETCH_COMMENTS_SUCCESS";
 export const FETCH_COMMENT = "FETCH_COMMENTS";
@@ -48,6 +56,8 @@ const IS_FETCHING_COMMENT_MESSAGE =
   "Já há uma requisição de comentário em andamento.";
 const IS_MANIPULATING_COMMENT_MESSAGE =
   "Já há uma requisição de alteração de comentário em andamento.";
+const IS_MANIPULATING_POST_MESSAGE =
+  "Já há uma requisição de alteração de postagem em andamento.";
 
 const fetchPostSuccess = (posts, postSchema = schema.posts) => ({
   type: FETCH_POST_SUCCESS,
@@ -172,7 +182,6 @@ export const voteComment = (id, option) => (dispatch, getState) => {
   return postCommentVote(id, option).then(
     res => {
       dispatch({ type: MANIPULATE_COMMENT_SUCCESS, comment });
-      dispatch(fetchComment(id));
     },
     error => {
       dispatch({
@@ -184,8 +193,32 @@ export const voteComment = (id, option) => (dispatch, getState) => {
   );
 };
 
+export const votePost = (id, option) => (dispatch, getState) => {
+  if (isManipulatingPost(getState(), id)) {
+    console.log(IS_MANIPULATING_POST_MESSAGE, `PostId: ${id}`);
+    return Promise.resolve();
+  }
+
+  const post = filterPost(getState(), undefined, id);
+
+  dispatch({ type: MANIPULATE_POST, post });
+  return postPostVote(id, option).then(
+    res => {
+      dispatch({ type: MANIPULATE_POST_SUCCESS, post });
+    },
+    error => {
+      dispatch({
+        type: MANIPULATE_POST_ERROR,
+        post,
+        error: error.message
+      });
+    }
+  );
+};
+
 export const vote = (id, option, type) => (dispatch, getState) => {
   if (type === VOTE_COMMENT) return voteComment(id, option)(dispatch, getState);
+  if (type === VOTE_POST) return votePost(id, option)(dispatch, getState);
 };
 
 export const editComment = (id, body) => (dispatch, getState) => {

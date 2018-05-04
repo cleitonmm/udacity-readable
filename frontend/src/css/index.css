@@ -18,8 +18,17 @@ ol {
   max-width: 50px;
 }
 
+.img-post {
+  max-width: 100px;
+}
+
 aside.img-comment {
   width: 50px;
+  vertical-align: middle;
+}
+
+aside.img-post {
+  width: 100px;
   vertical-align: middle;
 }
 

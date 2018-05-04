@@ -17,19 +17,23 @@ class VoteScore extends Component {
 
   state = {
     score: undefined,
+    prevScore: undefined,
     error: null
   };
 
 
   static getDerivedStateFromProps(nextProps, prevState) {
+    console.log(nextProps, prevState)
     if (prevState.score === undefined)
       return {
         score: nextProps.score,
+        prevScore: nextProps.score,
         error: null
       };
     if (nextProps.error)
       return {
-        score: nextProps.score,
+        score: prevState.prevScore,
+        prevScore: prevState.prevScore,
         error: nextProps.error
       };
 
@@ -43,7 +47,7 @@ class VoteScore extends Component {
     if (option === "upVote") newScore += 1;
     else if (option === "downVote") newScore -= 1;
 
-    this.setState({ score: newScore, error: null });
+    this.setState({ score: newScore, prevScore: score, error: null });
 
     vote(id, option, type);
   }
@@ -58,7 +62,7 @@ class VoteScore extends Component {
 
     color += " font-weight-bold p-0 mr-1";
     return (
-      <div>
+      <div className="text-center">
         <div className={color} style={{width: "20px", display: "inline-block"}}>{score}</div>
         <button
           type="button"

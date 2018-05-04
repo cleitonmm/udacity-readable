@@ -14,10 +14,6 @@ class CommentsView extends Component {
     isFetching: PropTypes.bool.isRequired
   };
 
-  static defaultProps = {
-    isFetching: false
-  };
-
   state = {
     orderedComments: []
   };
@@ -50,9 +46,12 @@ class CommentsView extends Component {
     if (orderedComments.length === 0) orderedComments = this.orderComments();
 
     return (
-      <div>
+      <div className="border-top mt-2 pt-3 pb-3">
+        <div className="d-inline-block">
+          <h5>Comments</h5>
+        </div>
         <button
-          className="btn btn-outline-primary"
+          className="btn btn-outline-primary btn-sm float-right"
           onClick={() => this.addComment()}
         >
           Add Comment
