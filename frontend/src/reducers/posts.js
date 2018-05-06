@@ -98,7 +98,12 @@ const openPostAdd = (state = false, action) => {
   }
 };
 
-export default combineReducers({ byIds, isFetching, errorMessage });
+export default combineReducers({
+  byIds,
+  isFetching,
+  errorMessage,
+  openPostAdd
+});
 
 const getAllPosts = state =>
   Object.keys(state.posts.byIds).map(id => state.posts.byIds[id]);

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import RootView from "./RootView";
 import CategoriesView from "./CategoriesView";
+import ButtonNewPost from "./ButtonNewPost";
 import Post from "./Post";
 import { Route, Switch, withRouter } from "react-router-dom";
 import { fetchCategories } from "../actions";
@@ -20,6 +21,7 @@ class App extends Component {
   render() {
     return (
       <div className="app">
+        <Route path="/" component={ButtonNewPost} />
         <Switch>
           <Route exact path="/" component={RootView} />
           <Route path="/category/:path" component={CategoriesView} />

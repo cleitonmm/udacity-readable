@@ -28,6 +28,45 @@ export function getPost(id) {
   );
 }
 
+export function putPost(id, title, body) {
+  return fetch(`http://localhost:3001/posts/${id}`, {
+    method: "PUT",
+    headers: HEADER.headers,
+    body: JSON.stringify({
+      title,
+      body
+    })
+  }).then(res => res.json());
+}
+
+export function deletePost(id) {
+  console.log(id, "DELETE")
+  return fetch(`http://localhost:3001/posts/${id}`, {
+    method: "DELETE",
+    headers: HEADER.headers
+  }).then(res => res.json());
+}
+
+
+export function postPost(post) {
+  const { title, body, author, category } = post;
+
+  const id = guid();
+  const timestamp = Date.now();
+
+  return fetch(`http://localhost:3001/posts`, {
+    method: "POST",
+    headers: HEADER.headers,
+    body: JSON.stringify({
+      id,
+      timestamp,
+      title,
+      body,
+      author,
+      category
+    })
+  }).then(res => res.json());
+}
 
 export function postPostVote(id, vote) {
   return fetch(`http://localhost:3001/posts/${id}`, {
@@ -85,7 +124,7 @@ export function deleteComment(id) {
 export function postComment(comment) {
   const { body, author, parentId } = comment;
 
-  const id = uuidv4();
+  const id = guid();
   const timestamp = Date.now();
 
   return fetch(`http://localhost:3001/comments`, {
@@ -101,11 +140,11 @@ export function postComment(comment) {
   }).then(res => res.json());
 }
 
-function uuidv4() {
-  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-    (
-      c ^
-      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-    ).toString(16)
-  );
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + s4() + s4() + s4() + s4() + s4() + s4();
 }

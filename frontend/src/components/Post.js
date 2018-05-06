@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { fetchPost, votePost, VOTE_POST } from "../actions";
+import { fetchPost, votePost, VOTE_POST, openPostModal } from "../actions";
 import { isFetchingPosts, isManipulatingPost, getPostError } from "../reducers";
 import CommentsView from "./CommentsView";
 import { TiEdit, TiDelete } from "react-icons/lib/ti";
 import VoteScore from "./VoteScore";
+import PostCreator from "./PostCreator";
 
 class Post extends Component {
   static propTypes = {
@@ -15,13 +16,21 @@ class Post extends Component {
     id: PropTypes.string
   };
 
+  editPost = () => {
+    this.props.openPostModal(this.props.post, true);
+  };
+
+  deletePost = () => {
+    this.props.openPostModal(this.props.post, undefined, true);
+  };
+
   componentWillMount() {
     const { fetchPost, id } = this.props;
     if (id) fetchPost(id);
   }
 
   render() {
-    const { post, isFetching, error, isManipulating } = this.props;
+    const { post, isFetching, error, isManipulating, isOpenDelete, isOpenEdit } = this.props;
 
     let formattedDate = "";
     let formattedTime = "";
@@ -46,11 +55,11 @@ class Post extends Component {
                   alt="profile"
                 />
 
-                <div className="ml-2">
-                  {post.author}
+                <div className="ml-2 text-center">{post.author}</div>
+                <div className="ml-2 text-secondary small text-center">
                   {formattedDate === dateNow
-                    ? ` às ${formattedTime}`
-                    : ` em ${formattedDate}`}
+                    ? ` Às ${formattedTime}`
+                    : ` Em ${formattedDate}`}
                 </div>
                 <div className="w-100">
                   <VoteScore
@@ -66,14 +75,14 @@ class Post extends Component {
                   <button
                     type="button"
                     className="btn-primary-outline p-0 m-0 btn-comment-edit"
-                    onClick={() => this.editComment()}
+                    onClick={() => this.editPost()}
                   >
                     <TiEdit size={20} />
                   </button>
                   <button
                     type="button"
                     className="btn-primary-outline p-0 m-0 btn-comment-edit"
-                    onClick={() => this.deleteComment()}
+                    onClick={() => this.deletePost()}
                   >
                     <TiDelete size={20} />
                   </button>
@@ -89,6 +98,9 @@ class Post extends Component {
         ) : (
           <span>Carregando...</span>
         )}
+        {isOpenEdit && <PostCreator type="EDIT" post={post} />}
+
+        {isOpenDelete && <PostCreator type="DELETE" post={post} />}
       </div>
     );
   }
@@ -108,4 +120,6 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default withRouter(connect(mapStateToProps, { fetchPost })(Post));
+export default withRouter(
+  connect(mapStateToProps, { fetchPost, openPostModal })(Post)
+);

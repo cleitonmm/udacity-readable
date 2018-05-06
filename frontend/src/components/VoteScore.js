@@ -23,7 +23,6 @@ class VoteScore extends Component {
 
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    console.log(nextProps, prevState)
     if (prevState.score === undefined)
       return {
         score: nextProps.score,

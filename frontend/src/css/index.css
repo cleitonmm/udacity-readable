@@ -61,7 +61,7 @@ aside.img-post {
   outline: none;
   padding: 20px;
   border-radius: 3px;
-  box-shadow: 0 3px 8px 0 rgba(0,0,0,.24), 0 3px 12px 0 rgba(0,0,0,.12);
+  box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.24), 0 3px 12px 0 rgba(0, 0, 0, 0.12);
   min-width: 60%;
 }
 
@@ -78,7 +78,7 @@ aside.img-post {
   outline: none;
   padding: 20px;
   border-radius: 3px;
-  box-shadow: 0 3px 8px 0 rgba(0,0,0,.24), 0 3px 12px 0 rgba(0,0,0,.12);
+  box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.24), 0 3px 12px 0 rgba(0, 0, 0, 0.12);
   min-width: 60%;
 }
 
@@ -88,9 +88,8 @@ aside.img-post {
   left: 0px;
   right: 0px;
   bottom: 0px;
-  background-color: rgba(255, 255, 255, 0.60);
+  background-color: rgba(255, 255, 255, 0.6);
 }
-
 
 .btn-save-cancel {
   width: 20%;
@@ -99,3 +98,23 @@ aside.img-post {
 .btn-group-save-cancel {
   width: 100%;
 }
+
+.btn-new-post {
+  position: absolute;
+  bottom: 5%;
+  right: 5%;
+}
+
+.btn-new-post span {
+  max-width: 0;
+  -webkit-transition: max-width 0.7s;
+  transition: max-width 0.7s;
+  display: inline-block;
+  vertical-align: top;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.btn-new-post:hover span {
+  max-width: 8rem;
+}
+

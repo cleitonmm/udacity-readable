@@ -16,7 +16,7 @@ class PostPreview extends Component {
             pathname: `/post/${post.id}`
           }}
         >
-          {this.props.post.title}
+          {post.title}
         </Link>
       </div>
     );

@@ -4,6 +4,9 @@ import {
   getCategoryPosts,
   getPost,
   getPostComments,
+  putPost,
+  deletePost,
+  postPost,
   getComment,
   postCommentVote,
   putComment,
@@ -294,6 +297,78 @@ export const addComment = comment => (dispatch, getState) => {
   );
 };
 
+export const editPost = (id, title, body) => (dispatch, getState) => {
+  if (isManipulatingPost(getState(), id)) {
+    console.log(IS_MANIPULATING_POST_MESSAGE, `PostId: ${id}`);
+    return Promise.resolve();
+  }
+
+  const post = filterPost(getState(), undefined, id);
+
+  dispatch({ type: MANIPULATE_POST, post });
+
+  return putPost(id, title, body).then(
+    res => {
+      dispatch({ type: MANIPULATE_POST_SUCCESS, post });
+      dispatch(fetchPost(id));
+    },
+    error => {
+      dispatch({
+        type: MANIPULATE_POST_ERROR,
+        post,
+        error: error.message
+      });
+    }
+  );
+};
+
+export const delPost = id => (dispatch, getState) => {
+  if (isManipulatingPost(getState(), id)) {
+    console.log(IS_MANIPULATING_POST_MESSAGE, `PostId: ${id}`);
+    return Promise.resolve();
+  }
+
+  const post = filterPost(getState(), undefined, id);
+
+  dispatch({ type: MANIPULATE_POST, post });
+
+  return deletePost(id).then(
+    res => {
+      dispatch({ type: MANIPULATE_POST_SUCCESS, post });
+    },
+    error => {
+      dispatch({
+        type: MANIPULATE_POST_ERROR,
+        post,
+        error: error.message
+      });
+    }
+  );
+};
+
+export const addPost = post => (dispatch, getState) => {
+  if (isFetchingPosts(getState())) {
+    console.log(IS_MANIPULATING_POST_MESSAGE);
+    return Promise.resolve();
+  }
+
+  dispatch({ type: FETCH_POST });
+
+  return postPost(post).then(
+    res => {
+      console.log(res)
+      dispatch({ type: FETCH_POST_SUCCESS });
+      openCommentModal()(dispatch);
+    },
+    error => {
+      dispatch({
+        type: FETCH_POST_ERROR,
+        error: error.message
+      });
+    }
+  );
+};
+
 export const openCommentModal = (
   comment = null,
   openCommentEdit = false,
@@ -306,5 +381,20 @@ export const openCommentModal = (
     openCommentEdit,
     openCommentDelete,
     openCommentAdd
+  });
+};
+
+export const openPostModal = (
+  post = null,
+  openPostEdit = false,
+  openPostDelete = false,
+  openPostAdd = false
+) => dispatch => {
+  dispatch({
+    type: OPEN_POST_MODAL,
+    post,
+    openPostEdit,
+    openPostDelete,
+    openPostAdd
   });
 };

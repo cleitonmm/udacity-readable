@@ -54,7 +54,7 @@ class CommentsView extends Component {
           className="btn btn-outline-primary btn-sm float-right"
           onClick={() => this.addComment()}
         >
-          Add Comment
+          Add a Comment
         </button>
         {!isFetching ? (
           orderedComments.length !== 0 ? (
