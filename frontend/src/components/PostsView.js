@@ -9,7 +9,7 @@ import { withRouter } from "react-router-dom";
 class PostsView extends Component {
   static propTypes = {
     posts: PropTypes.array.isRequired,
-    categoryFilter: PropTypes.func,
+    categoryFilter: PropTypes.string,
     isFetching: PropTypes.bool,
     fetchError: PropTypes.object
   };

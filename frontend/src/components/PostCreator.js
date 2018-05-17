@@ -56,7 +56,7 @@ class PostCreator extends Component {
         title: data.get("title"),
         body: data.get("body"),
         author: "cleiton",
-        category: this.state.category.path
+        category: this.state.selectedCategory.path
       };
 
       this.props.addPost(post);
