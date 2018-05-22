@@ -44,7 +44,7 @@ class Comment extends Component {
             <aside className="d-table-cell img-comment">
               <img
                 className="rounded-circle img-comment"
-                src="https://s3.amazonaws.com/uifaces/faces/twitter/dancounsell/128.jpg"
+                src="https://picsum.photos/300/?random"
                 alt="profile"
               />
             </aside>

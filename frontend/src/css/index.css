@@ -4,6 +4,36 @@ body {
   font-family: sans-serif;
 }
 
+.app {
+  padding-top: 50px;
+}
+
+.header {
+  max-height: 40px;
+  height: 40px;
+  padding: 10px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+
+.header span {
+  display: inline-block;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  border: none;
+  font: normal 32px/1 "Aladin", Helvetica, sans-serif;
+  color: rgb(255, 255, 255);
+  text-align: center;
+  text-transform: normal;
+  -o-text-overflow: clip;
+  text-overflow: clip;
+  white-space: pre;
+  text-shadow: 1px 1px 0 rgba(140,140,140,0.6) , -1px -1px 1px rgba(0,0,0,0.67) ;
+}
+
 ul,
 ol {
   list-style: none inside;
@@ -117,4 +147,3 @@ aside.img-post {
 .btn-new-post:hover span {
   max-width: 8rem;
 }
-

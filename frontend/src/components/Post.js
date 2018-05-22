@@ -51,7 +51,7 @@ class Post extends Component {
               <aside className="d-table-cell img-post">
                 <img
                   className="rounded-circle img-post"
-                  src="https://s3.amazonaws.com/uifaces/faces/twitter/dancounsell/128.jpg"
+                  src="https://picsum.photos/500/?random"
                   alt="profile"
                 />
 
@@ -88,7 +88,7 @@ class Post extends Component {
                   </button>
                 </div>
               </aside>
-              <div className="d-table-cell ml-2">
+              <div className="d-table-cell ml-2 w-100">
                 <h3 className="ml-3 text-center">{post.title}</h3>
                 <p className="ml-3 text-justify">{post.body}</p>
               </div>
