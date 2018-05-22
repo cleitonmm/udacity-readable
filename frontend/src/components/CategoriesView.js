@@ -5,20 +5,22 @@ import { fetchCategoryPosts } from "../actions";
 import { withRouter } from "react-router-dom";
 import PostsView from "./PostsView";
 import { filterCategory } from "../reducers";
+import ListCategories from "./ListCategories";
 
 class CategoriesView extends Component {
   static propTypes = {
-    category: PropTypes.array.isRequired
+    category: PropTypes.array.isRequired,
+    categories: PropTypes.array.isRequired
   };
 
   render() {
-    const { category } = this.props;
+    const { category, categories } = this.props;
     return (
       <div>
         {category.length !== 0 ? (
           category.map(cat => (
             <div key={cat.name}>
-              <div>{cat.name}</div>
+              <ListCategories cats={categories} selected={cat} />
               <PostsView categoryFilter={cat.path} />
             </div>
           ))
@@ -31,7 +33,8 @@ class CategoriesView extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  category: filterCategory(state, ownProps.match.params.path ? ownProps.match.params.path : "none")
+  category: filterCategory(state, ownProps.match.params.path ? ownProps.match.params.path : "none"),
+  categories: filterCategory(state)
 });
 
 export default withRouter(

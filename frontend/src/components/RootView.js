@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import PostsView from "./PostsView";
+import ListCategories from "./ListCategories";
 import {
   filterCategory,
   isFetchingCategories,
@@ -22,26 +23,14 @@ class RootView extends Component {
 
   render() {
     const { categories, isFetching, fetchError } = this.props;
+    console.log(categories)
     return (
       <div className="root-view">
         {!isFetching ? (
           !fetchError ? (
-            <div className="categories">
-              <h1>Categorias</h1>
-              <ul>
-                {categories.map(cat => (
-                  <li key={cat.name}>
-                    <Link
-                      to={{
-                        pathname: `/category/${cat.path}`
-                      }}
-                    >
-                      <div>{cat.name}</div>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-              <PostsView />
+            <div>
+            <ListCategories cats={categories} />
+            <PostsView />
             </div>
           ) : (
             <div>

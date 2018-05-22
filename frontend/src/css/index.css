@@ -78,6 +78,10 @@ aside.img-post {
   padding: 0;
 }
 
+.btn-cat {
+  min-width: 100px;
+}
+
 .comment-modal {
   position: absolute;
   top: 10%;
