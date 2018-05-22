@@ -15,8 +15,8 @@ class PostsView extends Component {
   };
 
   static defaultProps = {
-    isFetching: false,
-  }
+    isFetching: false
+  };
 
   state = {
     orderedPosts: []
@@ -29,7 +29,7 @@ class PostsView extends Component {
   }
 
   orderPosts = (
-    field = "votescore",
+    field = "voteScore",
     ascDesc = "desc",
     posts = this.props.posts
   ) => {
@@ -56,16 +56,31 @@ class PostsView extends Component {
 
     return (
       <div className="posts">
-        <h1>Postagens</h1>
-        <div>
-          Ordernar por:
-          <button onClick={e => this.handleOrder("votescore")}>Votação</button>
-          <button onClick={e => this.handleOrder("timestamp")}>Data</button>
+        <div className="border-bottom m-1 p-1">
+          <span className="h4">Posts</span>
+          <div className="d-inline-block float-right">
+            <span className="h5 pr-2">Order by:</span>
+            <div className="btn-group-sm d-inline-block">
+              <button
+                onClick={e => this.handleOrder("voteScore")}
+                className="btn btn-sm btn-outline-dark"
+              >
+                Vote
+              </button>
+              <button
+                onClick={e => this.handleOrder("timestamp")}
+                className="btn btn-sm btn-outline-dark"
+              >
+                Date
+              </button>
+            </div>
+          </div>
         </div>
+
         {!isFetching ? (
           !fetchError ? (
             orderedPosts.length === 0 ? (
-              <div>Essa categoria ainda não possui postagens.</div>
+              <div>No posts yet.</div>
             ) : (
               <ul>
                 {orderedPosts.map(post => (

@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { editComment, delComment, addComment, openCommentModal } from "../actions";
+import {
+  editComment,
+  delComment,
+  addComment,
+  openCommentModal
+} from "../actions";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
@@ -28,7 +33,7 @@ class CommentCreator extends Component {
     if (type === "ADD") {
       const comment = {
         body: data.get("body"),
-        author: "cleiton",
+        author: data.get("author"),
         parentId: postId
       };
 
@@ -52,12 +57,21 @@ class CommentCreator extends Component {
     return (
       <div className="form-group col">
         <form ref={form => (this.form = form)}>
+          <span>Comment:</span>
           <textarea
             name="body"
             className="form-control"
             autoFocus
             rows="8"
             defaultValue={type === "EDIT" ? comment.body : ""}
+            autoFocus
+          />
+          <span>Author:</span>
+          <input
+            type="text"
+            name="author"
+            className="form-control"
+            defaultValue={type === "EDIT" ? comment.author : ""}
           />
         </form>
 
@@ -121,5 +135,7 @@ class CommentCreator extends Component {
 }
 
 export default withRouter(
-  connect(null, { editComment, delComment, addComment, openCommentModal })(CommentCreator)
+  connect(null, { editComment, delComment, addComment, openCommentModal })(
+    CommentCreator
+  )
 );

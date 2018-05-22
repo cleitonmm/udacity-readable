@@ -55,7 +55,7 @@ class PostCreator extends Component {
       const post = {
         title: data.get("title"),
         body: data.get("body"),
-        author: "cleiton",
+        author: data.get("author"),
         category: this.state.selectedCategory.path
       };
 
@@ -94,6 +94,13 @@ class PostCreator extends Component {
             className="form-control"
             rows="8"
             defaultValue={type === "EDIT" ? post.body : ""}
+          />
+          <span>Author:</span>
+          <input
+            type="text"
+            name="author"
+            className="form-control"
+            defaultValue={type === "EDIT" ? post.author : ""}
           />
           <span>Category:</span>
           <ButtonDropdown

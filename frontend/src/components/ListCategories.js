@@ -2,10 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export default function ListCategories({ cats, selected }) {
-    console.log(cats)
   if (!selected) selected = { path: null };
   return (
-    <div className="btn-group d-block">
+    <div className="btn-group d-block text-center">
       {cats.map(cat => (
         <Link
           key={cat.path}

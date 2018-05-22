@@ -13,7 +13,7 @@ class ButtonNewPost extends Component {
   render() {
     const { openPostAdd } = this.props;
     return (
-      <div>
+      <div className="fixed-bottom mb-3">
         <button
           className="btn btn-lg btn-primary btn-new-post"
           onClick={() => this.addPost()}

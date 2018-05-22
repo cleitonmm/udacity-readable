@@ -23,7 +23,6 @@ class RootView extends Component {
 
   render() {
     const { categories, isFetching, fetchError } = this.props;
-    console.log(categories)
     return (
       <div className="root-view">
         {!isFetching ? (
