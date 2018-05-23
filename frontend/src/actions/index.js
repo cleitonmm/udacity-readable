@@ -356,7 +356,6 @@ export const addPost = post => (dispatch, getState) => {
 
   return postPost(post).then(
     res => {
-      console.log(res)
       dispatch({ type: FETCH_POST_SUCCESS });
       openCommentModal()(dispatch);
     },

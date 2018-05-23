@@ -21,7 +21,11 @@ class PostCreator extends Component {
 
   state = {
     dropdownOpen: false,
-    selectedCategory: undefined
+    selectedCategory: undefined,
+    titleValidation: null,
+    bodyValidation: null,
+    authorValidation: null,
+    categoryValidation: null
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -45,10 +49,14 @@ class PostCreator extends Component {
         id: this.props.post.id,
         title: data.get("title"),
         body: data.get("body"),
-        category: this.state.category.path
+        author: this.props.post.author,
+        category: this.state.selectedCategory
+          ? this.state.selectedCategory.path
+          : null
       };
 
-      this.props.editPost(post.id, post.title, post.body);
+      if (this.validateForm(post))
+        this.props.editPost(post.id, post.title, post.body);
     }
 
     if (type === "ADD") {
@@ -56,11 +64,50 @@ class PostCreator extends Component {
         title: data.get("title"),
         body: data.get("body"),
         author: data.get("author"),
-        category: this.state.selectedCategory.path
+        category: this.state.selectedCategory
+          ? this.state.selectedCategory.path
+          : null
       };
 
-      this.props.addPost(post);
+      if (this.validateForm(post)) this.props.addPost(post);
     }
+  };
+
+  validateForm = post => {
+    let valid = true;
+    let titleValidation = null;
+    let bodyValidation = null;
+    let authorValidation = null;
+    let categoryValidation = null;
+
+    if (post.title.length === 0 || !post.title) {
+      titleValidation = "Title is required.";
+      valid = false;
+    }
+
+    if (post.body.length === 0 || !post.body) {
+      bodyValidation = "Post is required.";
+      valid = false;
+    }
+
+    if (post.author.length === 0 || !post.author) {
+      authorValidation = "Author is required.";
+      valid = false;
+    }
+
+    if (!post.category) {
+      categoryValidation = "Category is required.";
+      valid = false;
+    }
+
+    this.setState({
+      titleValidation,
+      bodyValidation,
+      authorValidation,
+      categoryValidation
+    });
+
+    return valid;
   };
 
   handleDelete = () => {
@@ -75,7 +122,14 @@ class PostCreator extends Component {
 
   editAdd = () => {
     const { post, type, categories } = this.props;
-    const { dropdownOpen, selectedCategory } = this.state;
+    const {
+      dropdownOpen,
+      selectedCategory,
+      titleValidation,
+      bodyValidation,
+      authorValidation,
+      categoryValidation
+    } = this.state;
 
     return (
       <div className="form-group col">
@@ -88,6 +142,7 @@ class PostCreator extends Component {
             defaultValue={type === "EDIT" ? post.title : ""}
             autoFocus
           />
+          <span className="text-danger d-block">{titleValidation}</span>
           <span>Post:</span>
           <textarea
             name="body"
@@ -95,13 +150,19 @@ class PostCreator extends Component {
             rows="8"
             defaultValue={type === "EDIT" ? post.body : ""}
           />
-          <span>Author:</span>
-          <input
-            type="text"
-            name="author"
-            className="form-control"
-            defaultValue={type === "EDIT" ? post.author : ""}
-          />
+          <span className="text-danger d-block">{bodyValidation}</span>
+          {type === "ADD" && (
+            <div>
+              <span>Author:</span>
+              <input
+                type="text"
+                name="author"
+                className="form-control"
+                defaultValue={type === "EDIT" ? post.author : ""}
+              />
+            </div>
+          )}
+          <span className="text-danger d-block">{authorValidation}</span>
           <span>Category:</span>
           <ButtonDropdown
             isOpen={dropdownOpen}
@@ -129,6 +190,7 @@ class PostCreator extends Component {
               ))}
             </DropdownMenu>
           </ButtonDropdown>
+          <span className="text-danger d-block">{categoryValidation}</span>
         </form>
 
         <div className="btn-group-save-cancel m-2 text-right">
