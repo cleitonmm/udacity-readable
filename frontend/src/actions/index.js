@@ -28,12 +28,12 @@ import { normalize } from "normalizr";
 
 export const FETCH_CATEGORY_SUCCESS = "FETCH_CATEGORY_SUCCESS";
 export const FETCH_CATEGORY = "FETCH_CATEGORY";
-export const ADD_CATEGORY = "ADD_CATEGORY";
 export const FETCH_CATEGORY_ERROR = "FETCH_CATEGORY_ERROR";
 
 export const FETCH_POST_SUCCESS = "FETCH_POST_SUCCESS";
 export const FETCH_POST = "FETCH_POST";
 export const ADD_POST = "ADD_POST";
+export const DELETE_POST = "DELETE_POST";
 export const FETCH_POST_ERROR = "FETCH_POST_ERROR";
 export const MANIPULATE_POST = "MANIPULATE_POST";
 export const MANIPULATE_POST_ERROR = "MANIPULATE_POST_ERROR";
@@ -44,6 +44,7 @@ export const OPEN_POST_MODAL = "OPEN_POST_MODAL";
 export const FETCH_COMMENT_SUCCESS = "FETCH_COMMENTS_SUCCESS";
 export const FETCH_COMMENT = "FETCH_COMMENTS";
 export const ADD_COMMENT = "ADD_COMMENT";
+export const DELETE_COMMENT = "DELETE_COMMENT";
 export const FETCH_COMMENT_ERROR = "FETCH_COMMENT_ERROR";
 export const MANIPULATE_COMMENT = "MANIPULATE_COMMENT";
 export const MANIPULATE_COMMENT_ERROR = "MANIPULATE_COMMENT_ERROR";
@@ -235,9 +236,10 @@ export const editComment = (id, body) => (dispatch, getState) => {
   dispatch({ type: MANIPULATE_COMMENT, comment });
 
   return putComment(id, body).then(
-    res => {
+    comment => {
       dispatch({ type: MANIPULATE_COMMENT_SUCCESS, comment });
-      dispatch(fetchComment(id));
+      dispatch({ type: ADD_COMMENT, comment });
+      openCommentModal()(dispatch);
     },
     error => {
       dispatch({
@@ -262,7 +264,8 @@ export const delComment = id => (dispatch, getState) => {
   return deleteComment(id).then(
     res => {
       dispatch({ type: MANIPULATE_COMMENT_SUCCESS, comment });
-      dispatch(fetchPostComments(comment.parentId));
+      dispatch({ type: DELETE_COMMENT, comment });
+      openCommentModal()(dispatch);
     },
     error => {
       dispatch({
@@ -283,10 +286,10 @@ export const addComment = comment => (dispatch, getState) => {
   dispatch({ type: FETCH_COMMENT });
 
   return postComment(comment).then(
-    res => {
+    comment => {
       dispatch({ type: FETCH_COMMENT_SUCCESS });
+      dispatch({ type: ADD_COMMENT, comment });
       openCommentModal()(dispatch);
-      dispatch(fetchPostComments(comment.parentId));
     },
     error => {
       dispatch({
@@ -308,9 +311,10 @@ export const editPost = (id, title, body) => (dispatch, getState) => {
   dispatch({ type: MANIPULATE_POST, post });
 
   return putPost(id, title, body).then(
-    res => {
+    post => {
       dispatch({ type: MANIPULATE_POST_SUCCESS, post });
-      dispatch(fetchPost(id));
+      dispatch({ type: ADD_POST, post });
+      openPostModal()(dispatch);
     },
     error => {
       dispatch({
@@ -335,6 +339,8 @@ export const delPost = id => (dispatch, getState) => {
   return deletePost(id).then(
     res => {
       dispatch({ type: MANIPULATE_POST_SUCCESS, post });
+      dispatch({ type: DELETE_POST, post });
+      openPostModal()(dispatch);
     },
     error => {
       dispatch({
@@ -355,9 +361,10 @@ export const addPost = post => (dispatch, getState) => {
   dispatch({ type: FETCH_POST });
 
   return postPost(post).then(
-    res => {
+    post => {
       dispatch({ type: FETCH_POST_SUCCESS });
-      openCommentModal()(dispatch);
+      dispatch({ type: ADD_POST, post });
+      openPostModal(post)(dispatch);
     },
     error => {
       dispatch({

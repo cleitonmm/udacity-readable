@@ -21,7 +21,6 @@ class VoteScore extends Component {
     error: null
   };
 
-
   static getDerivedStateFromProps(nextProps, prevState) {
     if (prevState.score === undefined)
       return {
@@ -55,6 +54,8 @@ class VoteScore extends Component {
     const { score, error } = this.state;
     const { isManipulating } = this.props;
 
+    if(error) console.log(error);
+
     let color = "text-secondary";
     if (score > 0) color = "text-success";
     else if (score < 0) color = "text-danger";
@@ -62,7 +63,6 @@ class VoteScore extends Component {
     color += " font-weight-bold p-0 mr-1";
     return (
       <div className="text-center">
-        <div className={color} style={{width: "20px", display: "inline-block"}}>{score}</div>
         <button
           type="button"
           className="btn btn-outline-success btn-sm p-0 mr-1"
@@ -71,6 +71,12 @@ class VoteScore extends Component {
         >
           <FaThumbsOUp size={20} />
         </button>
+        <div
+          className={color}
+          style={{ width: "20px", display: "inline-block" }}
+        >
+          {score}
+        </div>
         <button
           type="button"
           className="btn btn-outline-danger btn-sm p-0 mr-1"

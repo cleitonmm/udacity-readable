@@ -41,7 +41,8 @@ class PostCreator extends Component {
   }
 
   handleEditAdd = () => {
-    const { type, category } = this.props;
+    const { type } = this.props;
+    const { selectedCategory } = this.state;
     const data = new FormData(this.form);
 
     if (type === "EDIT") {
@@ -50,9 +51,7 @@ class PostCreator extends Component {
         title: data.get("title"),
         body: data.get("body"),
         author: this.props.post.author,
-        category: this.state.selectedCategory
-          ? this.state.selectedCategory.path
-          : null
+        category: selectedCategory ? selectedCategory.path : null
       };
 
       if (this.validateForm(post))
@@ -80,17 +79,17 @@ class PostCreator extends Component {
     let authorValidation = null;
     let categoryValidation = null;
 
-    if (post.title.length === 0 || !post.title) {
+    if (post.title.length === 0) {
       titleValidation = "Title is required.";
       valid = false;
     }
 
-    if (post.body.length === 0 || !post.body) {
+    if (post.body.length === 0) {
       bodyValidation = "Post is required.";
       valid = false;
     }
 
-    if (post.author.length === 0 || !post.author) {
+    if (post.author.length === 0) {
       authorValidation = "Author is required.";
       valid = false;
     }
@@ -160,9 +159,10 @@ class PostCreator extends Component {
                 className="form-control"
                 defaultValue={type === "EDIT" ? post.author : ""}
               />
+              <span className="text-danger d-block">{authorValidation}</span>
             </div>
           )}
-          <span className="text-danger d-block">{authorValidation}</span>
+
           <span>Category:</span>
           <ButtonDropdown
             isOpen={dropdownOpen}
@@ -173,9 +173,9 @@ class PostCreator extends Component {
             }
           >
             <DropdownToggle caret color="primary-outline">
-              {this.state.selectedCategory
-                ? this.state.selectedCategory.name.charAt(0).toUpperCase() +
-                  this.state.selectedCategory.name.slice(1).toLowerCase()
+              {selectedCategory
+                ? selectedCategory.name.charAt(0).toUpperCase() +
+                  selectedCategory.name.slice(1).toLowerCase()
                 : "Pick a Category"}
             </DropdownToggle>
             <DropdownMenu>
@@ -236,6 +236,7 @@ class PostCreator extends Component {
 
   render() {
     const { type } = this.props;
+
     return (
       <Modal
         className="comment-modal"

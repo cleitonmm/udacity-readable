@@ -1,5 +1,6 @@
 import {
   ADD_COMMENT,
+  DELETE_COMMENT,
   FETCH_COMMENT_SUCCESS,
   FETCH_COMMENT,
   FETCH_COMMENT_ERROR,
@@ -17,8 +18,22 @@ const byIds = (state = {}, action) => {
     };
   }
 
-  let { comment, openCommentEdit, openCommentDelete } = action;
+  let { comment } = action;
   switch (action.type) {
+    case ADD_COMMENT:
+      return {
+        ...state,
+        [comment.id]: {
+          ...comment,
+          isManipulating: false,
+          errorMessage: null
+        }
+      };
+    case DELETE_COMMENT:
+      let newState = state;
+      delete newState[comment.id];
+      return { ...newState };
+
     case MANIPULATE_COMMENT:
       return {
         ...state,
@@ -45,20 +60,6 @@ const byIds = (state = {}, action) => {
           errorMessage: null
         }
       };
-
-    case OPEN_COMMENT_MODAL:
-      if (comment) {
-        return {
-          ...state,
-          [comment.id]: {
-            ...comment,
-            openCommentEdit,
-            openCommentDelete
-          }
-        };
-      } else {
-        return state;
-      }
 
     default:
       return state;
@@ -89,11 +90,18 @@ const errorMessage = (state = null, action) => {
   }
 };
 
-const openCommentAdd = (state = false, action) => {
+const openCommentModal = (
+  state = { comment: null, add: false, edit: false, delete: false },
+  action
+) => {
   switch (action.type) {
     case OPEN_COMMENT_MODAL:
-      if (!action.comment) return action.openCommentAdd;
-      else return state;
+      return {
+        comment: action.comment,
+        add: action.openCommentAdd,
+        edit: action.openCommentEdit,
+        delete: action.openCommentDelete
+      };
     default:
       return state;
   }
@@ -103,7 +111,7 @@ export default combineReducers({
   byIds,
   isFetching,
   errorMessage,
-  openCommentAdd
+  openCommentModal
 });
 
 const getAllComments = state =>

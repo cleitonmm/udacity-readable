@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { fetchPost, votePost, VOTE_POST, openPostModal } from "../actions";
 import { isFetchingPosts, isManipulatingPost, getPostError } from "../reducers";
@@ -30,7 +30,16 @@ class Post extends Component {
   }
 
   render() {
-    const { post, isFetching, error, isManipulating, isOpenDelete, isOpenEdit } = this.props;
+    const {
+      post,
+      isFetching,
+      error,
+      isManipulating,
+      isOpenDelete,
+      isOpenEdit
+    } = this.props;
+
+    if(Object.keys(post).length === 0) return <Redirect to="/" />;
 
     let formattedDate = "";
     let formattedTime = "";
@@ -115,8 +124,14 @@ const mapStateToProps = (state, ownProps) => {
     isFetching: isFetchingPosts(state),
     isManipulating: post ? isManipulatingPost(state, id) : false,
     error: post ? getPostError(state, id) : null,
-    isOpenEdit: post ? post.openPostEdit : false,
-    isOpenDelete: post ? post.openPostDelete : false
+    isOpenEdit:
+      state.posts.openPostModal.post === post
+        ? state.posts.openPostModal.edit
+        : false,
+    isOpenDelete:
+      state.posts.openPostModal.post === post
+        ? state.posts.openPostModal.delete
+        : false
   };
 };
 

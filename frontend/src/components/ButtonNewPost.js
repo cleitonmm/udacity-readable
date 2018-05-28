@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import IoAndroidCreate from "react-icons/lib/io/android-create";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { openPostModal } from "../actions";
 import PostCreator from "./PostCreator";
@@ -11,7 +11,10 @@ class ButtonNewPost extends Component {
   };
 
   render() {
-    const { openPostAdd } = this.props;
+    const { add, del, edit, post } = this.props;
+
+    if (post && !add && !del && !edit)
+      return <Redirect to={`/post/${post.id}`} />;
     return (
       <div className="fixed-bottom mb-3">
         <button
@@ -22,14 +25,19 @@ class ButtonNewPost extends Component {
           <span>Create a Post</span>
         </button>
 
-        {openPostAdd && <PostCreator type="ADD" />}
+        {add && <PostCreator type="ADD" />}
       </div>
     );
   }
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  openPostAdd: state.posts.openPostAdd
+  add: state.posts.openPostModal.add,
+  del: state.posts.openPostModal.delete,
+  edit: state.posts.openPostModal.edit,
+  post: state.posts.openPostModal.post
 });
 
-export default withRouter(connect(mapStateToProps, { openPostModal })(ButtonNewPost));
+export default withRouter(
+  connect(mapStateToProps, { openPostModal })(ButtonNewPost)
+);

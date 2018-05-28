@@ -1,5 +1,6 @@
 import {
   ADD_POST,
+  DELETE_POST,
   FETCH_POST_SUCCESS,
   FETCH_POST,
   FETCH_POST_ERROR,
@@ -18,6 +19,21 @@ const byIds = (state = {}, action) => {
   }
   let { post, openPostEdit, openPostDelete } = action;
   switch (action.type) {
+    case ADD_POST:
+      return {
+        ...state,
+        [post.id]: {
+          ...post,
+          isManipulating: false,
+          errorMessage: null
+        }
+      };
+
+    case DELETE_POST:
+      let newState = state;
+      delete newState[post.id];
+      return { ...newState };
+
     case MANIPULATE_POST:
       return {
         ...state,
@@ -44,20 +60,6 @@ const byIds = (state = {}, action) => {
           errorMessage: null
         }
       };
-
-    case OPEN_POST_MODAL:
-      if (post) {
-        return {
-          ...state,
-          [post.id]: {
-            ...post,
-            openPostEdit,
-            openPostDelete
-          }
-        };
-      } else {
-        return state;
-      }
 
     default:
       return state;
@@ -88,11 +90,18 @@ const errorMessage = (state = null, action) => {
   }
 };
 
-const openPostAdd = (state = false, action) => {
+const openPostModal = (
+  state = { post: null, add: false, edit: false, delete: false },
+  action
+) => {
   switch (action.type) {
     case OPEN_POST_MODAL:
-      if (!action.post) return action.openPostAdd;
-      else return state;
+      return {
+        post: action.post,
+        add: action.openPostAdd,
+        edit: action.openPostEdit,
+        delete: action.openPostDelete
+      };
     default:
       return state;
   }
@@ -102,7 +111,7 @@ export default combineReducers({
   byIds,
   isFetching,
   errorMessage,
-  openPostAdd
+  openPostModal
 });
 
 const getAllPosts = state =>

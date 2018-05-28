@@ -36,7 +36,6 @@ class Comment extends Component {
         minute: "numeric"
       });
     }
-
     return (
       <div className="container">
         <div className="card p-1 m-1">
@@ -104,8 +103,8 @@ const mapStateToProps = (state, { comment }) => ({
   comment,
   isManipulating: isManipulatingComment(state, comment.id),
   error: getCommentError(state, comment.id),
-  isOpenEdit: state.comments.byIds[comment.id].openCommentEdit,
-  isOpenDelete: state.comments.byIds[comment.id].openCommentDelete
+  isOpenEdit: state.comments.openCommentModal.comment === comment ? state.comments.openCommentModal.edit : false,
+  isOpenDelete: state.comments.openCommentModal.comment === comment ? state.comments.openCommentModal.delete : false,
 });
 
 export default withRouter(

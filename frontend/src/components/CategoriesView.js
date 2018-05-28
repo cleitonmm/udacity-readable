@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { fetchCategoryPosts } from "../actions";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import PostsView from "./PostsView";
 import { filterCategory } from "../reducers";
 import ListCategories from "./ListCategories";
@@ -15,6 +15,7 @@ class CategoriesView extends Component {
 
   render() {
     const { category, categories } = this.props;
+    if (category.length === 0) return <Redirect to="/" />;
     return (
       <div>
         {category.length !== 0 ? (
@@ -33,7 +34,10 @@ class CategoriesView extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  category: filterCategory(state, ownProps.match.params.path ? ownProps.match.params.path : "none"),
+  category: filterCategory(
+    state,
+    ownProps.match.params.path ? ownProps.match.params.path : "none"
+  ),
   categories: filterCategory(state)
 });
 

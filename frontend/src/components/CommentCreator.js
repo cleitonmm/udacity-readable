@@ -17,6 +17,11 @@ class CommentCreator extends Component {
     type: PropTypes.oneOf(["EDIT", "ADD", "DELETE"]).isRequired
   };
 
+  state = {
+    bodyValidation: null,
+    authorValidation: null
+  };
+
   handleEditAdd = () => {
     const { type, postId } = this.props;
     const data = new FormData(this.form);
@@ -24,10 +29,11 @@ class CommentCreator extends Component {
     if (type === "EDIT") {
       const comment = {
         id: this.props.comment.id,
-        body: data.get("body")
+        body: data.get("body"),
+        author: this.props.comment.author
       };
 
-      this.props.editComment(comment.id, comment.body);
+      if (this.validateForm(comment)) this.props.editComment(comment.id, comment.body);
     }
 
     if (type === "ADD") {
@@ -37,7 +43,7 @@ class CommentCreator extends Component {
         parentId: postId
       };
 
-      this.props.addComment(comment);
+      if (this.validateForm(comment)) this.props.addComment(comment);
     }
   };
 
@@ -51,8 +57,32 @@ class CommentCreator extends Component {
     this.props.openCommentModal(this.props.comment, false, false, false);
   };
 
+  validateForm = comment => {
+    let valid = true;
+    let bodyValidation = null;
+    let authorValidation = null;
+
+    if (comment.body.length === 0) {
+      bodyValidation = "Comment is required.";
+      valid = false;
+    }
+
+    if (comment.author.length === 0) {
+      authorValidation = "Author is required.";
+      valid = false;
+    }
+
+    this.setState({
+      bodyValidation,
+      authorValidation
+    });
+
+    return valid;
+  };
+
   editAdd = () => {
     const { comment, type } = this.props;
+    const { bodyValidation, authorValidation } = this.state;
 
     return (
       <div className="form-group col">
@@ -64,15 +94,20 @@ class CommentCreator extends Component {
             autoFocus
             rows="8"
             defaultValue={type === "EDIT" ? comment.body : ""}
-            autoFocus
           />
-          <span>Author:</span>
-          <input
-            type="text"
-            name="author"
-            className="form-control"
-            defaultValue={type === "EDIT" ? comment.author : ""}
-          />
+          <span className="text-danger d-block">{bodyValidation}</span>
+          {type === "ADD" && (
+            <div>
+              <span>Author:</span>
+              <input
+                type="text"
+                name="author"
+                className="form-control"
+                defaultValue={type === "EDIT" ? comment.author : ""}
+              />
+              <span className="text-danger d-block">{authorValidation}</span>
+            </div>
+          )}
         </form>
 
         <div className="btn-group-save-cancel m-2 text-right">

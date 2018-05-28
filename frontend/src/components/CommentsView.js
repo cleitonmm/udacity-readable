@@ -60,7 +60,9 @@ class CommentsView extends Component {
           orderedComments.length !== 0 ? (
             <div className="card-group">
               {orderedComments.map(comment => (
-                <Comment key={comment.id} comment={comment} />
+                <div key={comment.id} className="w-100">
+                  <Comment comment={comment} />
+                </div>
               ))}
             </div>
           ) : (
@@ -79,7 +81,7 @@ const mapStateToProps = (state, { postId }) => ({
   postId,
   comments: filterComments(state, postId),
   isFetching: isFetchingComments(state),
-  openCommentAdd: state.comments.openCommentAdd
+  openCommentAdd: state.comments.openCommentModal.add
 });
 
 export default withRouter(

@@ -23,9 +23,9 @@ class App extends Component {
       <div className="app">
         <Route path="/" component={Header} />
         <Switch>
-          <Route exact path="/" component={RootView} />
           <Route path="/category/:path" component={CategoriesView} />
           <Route path="/post/:id" component={Post} />
+          <Route path="/" component={RootView} />
         </Switch>
       </div>
     );
