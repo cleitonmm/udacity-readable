@@ -2,26 +2,17 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withRouter, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import { fetchPost, votePost, VOTE_POST, openPostModal } from "../actions";
+import { fetchPost, votePost, VOTE_POST } from "../actions";
 import { isFetchingPosts, isManipulatingPost, getPostError } from "../reducers";
 import CommentsView from "./CommentsView";
-import { TiEdit, TiDelete } from "react-icons/lib/ti";
 import VoteScore from "./VoteScore";
-import PostCreator from "./PostCreator";
+import EditDeletePost from "./EditDeletePost";
 
 class Post extends Component {
   static propTypes = {
     post: PropTypes.object.isRequired,
     isFetching: PropTypes.bool.isRequired,
     id: PropTypes.string
-  };
-
-  editPost = () => {
-    this.props.openPostModal(this.props.post, true);
-  };
-
-  deletePost = () => {
-    this.props.openPostModal(this.props.post, undefined, true);
   };
 
   componentDidMount() {
@@ -32,15 +23,7 @@ class Post extends Component {
   }
 
   render() {
-    const {
-      post,
-      error,
-      fetchError,
-      isManipulating,
-      isOpenDelete,
-      isOpenEdit,
-      isFetching
-    } = this.props;
+    const { post, error, fetchError, isManipulating, isFetching } = this.props;
 
     if (fetchError) return <Redirect to="/" />;
 
@@ -85,23 +68,8 @@ class Post extends Component {
                     isManipulating={isManipulating}
                   />
                 </div>
-                <div className="comment-edit text-center w-100">
-                  <button
-                    type="button"
-                    className="btn-primary-outline p-0 m-0 btn-comment-edit"
-                    onClick={() => this.editPost()}
-                  >
-                    <TiEdit size={20} />
-                  </button>
-                  <button
-                    type="button"
-                    className="btn-primary-outline p-0 m-0 btn-comment-edit"
-                    onClick={() => this.deletePost()}
-                  >
-                    <TiDelete size={20} />
-                  </button>
-                </div>
-                <div className="text-center text-secondary"> 
+                <EditDeletePost post={post} />
+                <div className="text-center text-secondary">
                   {post.category.toUpperCase()}
                 </div>
               </aside>
@@ -115,9 +83,6 @@ class Post extends Component {
         ) : (
           <span>Carregando...</span>
         )}
-        {isOpenEdit && <PostCreator type="EDIT" post={post} />}
-
-        {isOpenDelete && <PostCreator type="DELETE" post={post} />}
       </div>
     );
   }
@@ -132,18 +97,8 @@ const mapStateToProps = (state, ownProps) => {
     isFetching: isFetchingPosts(state),
     isManipulating: post ? isManipulatingPost(state, id) : false,
     error: post ? getPostError(state, id) : null,
-    fetchError: state.posts.errorMessage,
-    isOpenEdit:
-      state.posts.openPostModal.post === post
-        ? state.posts.openPostModal.edit
-        : false,
-    isOpenDelete:
-      state.posts.openPostModal.post === post
-        ? state.posts.openPostModal.delete
-        : false
+    fetchError: state.posts.errorMessage
   };
 };
 
-export default withRouter(
-  connect(mapStateToProps, { fetchPost, openPostModal })(Post)
-);
+export default withRouter(connect(mapStateToProps, { fetchPost })(Post));

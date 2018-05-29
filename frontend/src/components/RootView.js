@@ -32,7 +32,7 @@ class RootView extends Component {
             </div>
           ) : (
             <div>
-              <span>Ops... ocorreu um erro ao buscar informações.</span>
+              <span>Ops... something went wrong!</span>
               {console.log(fetchError)}
             </div>
           )

@@ -51,7 +51,7 @@ class PostCreator extends Component {
         title: data.get("title"),
         body: data.get("body"),
         author: this.props.post.author,
-        category: selectedCategory ? selectedCategory.path : null
+        category: this.props.post.category
       };
 
       if (this.validateForm(post))
@@ -63,9 +63,7 @@ class PostCreator extends Component {
         title: data.get("title"),
         body: data.get("body"),
         author: data.get("author"),
-        category: this.state.selectedCategory
-          ? this.state.selectedCategory.path
-          : null
+        category: selectedCategory ? selectedCategory.path : null
       };
 
       if (this.validateForm(post)) this.props.addPost(post);
@@ -160,37 +158,37 @@ class PostCreator extends Component {
                 defaultValue={type === "EDIT" ? post.author : ""}
               />
               <span className="text-danger d-block">{authorValidation}</span>
+
+              <span>Category:</span>
+              <ButtonDropdown
+                isOpen={dropdownOpen}
+                toggle={() =>
+                  this.setState({
+                    dropdownOpen: !this.state.dropdownOpen
+                  })
+                }
+              >
+                <DropdownToggle caret color="primary-outline">
+                  {selectedCategory
+                    ? selectedCategory.name.charAt(0).toUpperCase() +
+                      selectedCategory.name.slice(1).toLowerCase()
+                    : "Pick a Category"}
+                </DropdownToggle>
+                <DropdownMenu>
+                  {categories.map(cat => (
+                    <DropdownItem
+                      key={cat.path}
+                      onClick={() => this.setState({ selectedCategory: cat })}
+                    >
+                      {cat.name.charAt(0).toUpperCase() +
+                        cat.name.slice(1).toLowerCase()}
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </ButtonDropdown>
+              <span className="text-danger d-block">{categoryValidation}</span>
             </div>
           )}
-
-          <span>Category:</span>
-          <ButtonDropdown
-            isOpen={dropdownOpen}
-            toggle={() =>
-              this.setState({
-                dropdownOpen: !this.state.dropdownOpen
-              })
-            }
-          >
-            <DropdownToggle caret color="primary-outline">
-              {selectedCategory
-                ? selectedCategory.name.charAt(0).toUpperCase() +
-                  selectedCategory.name.slice(1).toLowerCase()
-                : "Pick a Category"}
-            </DropdownToggle>
-            <DropdownMenu>
-              {categories.map(cat => (
-                <DropdownItem
-                  key={cat.path}
-                  onClick={() => this.setState({ selectedCategory: cat })}
-                >
-                  {cat.name.charAt(0).toUpperCase() +
-                    cat.name.slice(1).toLowerCase()}
-                </DropdownItem>
-              ))}
-            </DropdownMenu>
-          </ButtonDropdown>
-          <span className="text-danger d-block">{categoryValidation}</span>
         </form>
 
         <div className="btn-group-save-cancel m-2 text-right">

@@ -92,7 +92,7 @@ class PostsView extends Component {
             )
           ) : (
             <div>
-              <span>Ops... ocorreu um erro ao carregar postagens!</span>
+              <span>Ops... something went wrong while fetching posts!</span>
               {console.log(fetchError)}
             </div>
           )

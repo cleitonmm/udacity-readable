@@ -6,10 +6,19 @@ import { connect } from "react-redux";
 import { votePost, VOTE_POST } from "../actions";
 import { isManipulatingPost, getPostError } from "../reducers";
 import VoteScore from "./VoteScore";
+import EditDeletePost from "./EditDeletePost";
 
 class PostPreview extends Component {
   static propTypes = {
     post: PropTypes.object.isRequired
+  };
+
+  editPost = () => {
+    this.props.openPostModal(this.props.post, true);
+  };
+
+  deletePost = () => {
+    this.props.openPostModal(this.props.post, undefined, true);
   };
 
   render() {
@@ -38,6 +47,9 @@ class PostPreview extends Component {
                   src="https://picsum.photos/50/?random"
                   alt="profile"
                 />
+                <div className="float-left text-left">
+                  <EditDeletePost post={post} />
+                </div>
               </th>
               <th className="d-table-cell w-50">
                 <Link
