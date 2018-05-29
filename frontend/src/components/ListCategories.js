@@ -9,7 +9,7 @@ export default function ListCategories({ cats, selected }) {
         <Link
           key={cat.path}
           to={{
-            pathname: `/category/${cat.path}`
+            pathname: `/${cat.path}`
           }}
         >
           <div

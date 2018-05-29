@@ -114,7 +114,7 @@ class PostCreator extends Component {
   };
 
   closeModal = () => {
-    this.props.openPostModal(this.props.post, false, false, false);
+    this.props.openPostModal();
   };
 
   editAdd = () => {

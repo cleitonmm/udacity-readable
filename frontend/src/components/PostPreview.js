@@ -54,7 +54,7 @@ class PostPreview extends Component {
               <th className="d-table-cell w-50">
                 <Link
                   to={{
-                    pathname: `/post/${post.id}`
+                    pathname: `/${post.category}/${post.id}`
                   }}
                 >
                   {post.title}

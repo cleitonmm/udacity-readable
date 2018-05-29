@@ -23,8 +23,8 @@ class App extends Component {
       <div className="app">
         <Route path="/" component={Header} />
         <Switch>
-          <Route path="/category/:path" component={CategoriesView} />
-          <Route path="/post/:id" component={Post} />
+          <Route path="/:path/:id" component={Post} />
+          <Route path="/:path" component={CategoriesView} />
           <Route path="/" component={RootView} />
         </Switch>
       </div>

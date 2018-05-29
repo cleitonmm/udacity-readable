@@ -14,7 +14,7 @@ class ButtonNewPost extends Component {
     const { add, del, edit, post } = this.props;
     if (post && !add && !del && !edit) {
       this.props.openPostModal();
-      return <Redirect to={`/post/${post.id}`} />;
+      return <Redirect to={`/${post.category}/${post.id}`} />;
     }
     return (
       <div className="fixed-bottom mb-3">
