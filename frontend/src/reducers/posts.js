@@ -84,6 +84,7 @@ const errorMessage = (state = null, action) => {
     case FETCH_POST_SUCCESS:
       return null;
     case FETCH_POST_ERROR:
+    case DELETE_POST:
       return action.error || "Erro indefinido ao carregar postagens.";
     default:
       return state;

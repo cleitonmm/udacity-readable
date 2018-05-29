@@ -48,7 +48,7 @@ class CommentsView extends Component {
     return (
       <div className="border-top mt-2 pt-3 pb-3">
         <div className="d-inline-block">
-          <h5>Comments</h5>
+          <h5>Comments ({orderedComments.length})</h5>
         </div>
         <button
           className="btn btn-outline-primary btn-sm float-right"

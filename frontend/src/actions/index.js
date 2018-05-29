@@ -342,7 +342,7 @@ export const delPost = id => (dispatch, getState) => {
   return deletePost(id).then(
     res => {
       dispatch({ type: MANIPULATE_POST_SUCCESS, post });
-      dispatch({ type: DELETE_POST, post });
+      dispatch({ type: DELETE_POST, post, error: "Post deleted." });
       openPostModal()(dispatch);
     },
     error => {
