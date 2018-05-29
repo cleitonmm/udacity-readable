@@ -24,22 +24,25 @@ class Post extends Component {
     this.props.openPostModal(this.props.post, undefined, true);
   };
 
-  componentWillMount() {
+  componentDidMount() {
     const { fetchPost, id } = this.props;
-    if (id) fetchPost(id);
+    if (id) {
+      fetchPost(id);
+    }
   }
 
   render() {
     const {
       post,
-      isFetching,
       error,
+      fetchError,
       isManipulating,
       isOpenDelete,
-      isOpenEdit
+      isOpenEdit,
+      isFetching
     } = this.props;
 
-    if(Object.keys(post).length === 0) return <Redirect to="/" />;
+    if (fetchError) return <Redirect to="/" />;
 
     let formattedDate = "";
     let formattedTime = "";
@@ -63,12 +66,14 @@ class Post extends Component {
                   src="https://picsum.photos/500/?random"
                   alt="profile"
                 />
-
-                <div className="ml-2 text-center">{post.author}</div>
+                <div className="text-center">
+                  <span className="ml-2 text-secondary small">by</span>
+                  <span className="ml-2 text-center">{post.author}</span>
+                </div>
                 <div className="ml-2 text-secondary small text-center">
                   {formattedDate === dateNow
-                    ? ` Às ${formattedTime}`
-                    : ` Em ${formattedDate}`}
+                    ? ` at ${formattedTime}`
+                    : ` in ${formattedDate}`}
                 </div>
                 <div className="w-100">
                   <VoteScore
@@ -95,6 +100,9 @@ class Post extends Component {
                   >
                     <TiDelete size={20} />
                   </button>
+                </div>
+                <div className="text-center text-secondary"> 
+                  {post.category.toUpperCase()}
                 </div>
               </aside>
               <div className="d-table-cell ml-2 w-100">
@@ -124,6 +132,7 @@ const mapStateToProps = (state, ownProps) => {
     isFetching: isFetchingPosts(state),
     isManipulating: post ? isManipulatingPost(state, id) : false,
     error: post ? getPostError(state, id) : null,
+    fetchError: state.posts.errorMessage,
     isOpenEdit:
       state.posts.openPostModal.post === post
         ? state.posts.openPostModal.edit

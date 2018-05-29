@@ -132,7 +132,10 @@ export const fetchPost = id => (dispatch, getState) => {
 
   dispatch({ type: FETCH_POST });
   return getPost(id).then(
-    post => dispatch(fetchPostSuccess(post, schema.post)),
+    post => {
+      if (post.error || Object.keys(post).length === 0) dispatch({ type: FETCH_POST_ERROR, error: "Therer was a error fetching post" });
+      else dispatch(fetchPostSuccess(post, schema.post));
+    },
     error => dispatch({ type: FETCH_POST_ERROR, error: error.message })
   );
 };

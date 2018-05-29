@@ -17,7 +17,7 @@ const byIds = (state = {}, action) => {
       ...action.posts.entities.post
     };
   }
-  let { post, openPostEdit, openPostDelete } = action;
+  let { post } = action;
   switch (action.type) {
     case ADD_POST:
       return {

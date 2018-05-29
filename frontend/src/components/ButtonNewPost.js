@@ -12,9 +12,10 @@ class ButtonNewPost extends Component {
 
   render() {
     const { add, del, edit, post } = this.props;
-
-    if (post && !add && !del && !edit)
+    if (post && !add && !del && !edit) {
+      this.props.openPostModal();
       return <Redirect to={`/post/${post.id}`} />;
+    }
     return (
       <div className="fixed-bottom mb-3">
         <button

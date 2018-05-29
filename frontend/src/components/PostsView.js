@@ -11,7 +11,7 @@ class PostsView extends Component {
     posts: PropTypes.array.isRequired,
     categoryFilter: PropTypes.string,
     isFetching: PropTypes.bool,
-    fetchError: PropTypes.object
+    fetchError: PropTypes.string
   };
 
   static defaultProps = {

@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { votePost, VOTE_POST } from "../actions";
+import { isManipulatingPost, getPostError } from "../reducers";
+import VoteScore from "./VoteScore";
 
 class PostPreview extends Component {
   static propTypes = {
@@ -8,7 +13,7 @@ class PostPreview extends Component {
   };
 
   render() {
-    const { post } = this.props;
+    const { post, isManipulating, error } = this.props;
 
     let formattedDate = "";
     let formattedTime = "";
@@ -24,7 +29,7 @@ class PostPreview extends Component {
 
     return (
       <div className="container">
-        <table className="d-table d-inline-block w-100">
+        <table className="d-table d-inline-block w-100 border-bottom">
           <tbody>
             <tr>
               <th className="d-table-cell img-post-preview p-3 w-25">
@@ -43,23 +48,48 @@ class PostPreview extends Component {
                   {post.title}
                 </Link>
                 <footer className="blockquote-footer">
+                  <span className="ml-2 text-secondary small text-center">
+                    by
+                  </span>
                   <span className="ml-2 text-left">{post.author}</span>
                   <span className="ml-2 text-secondary small text-center">
                     {formattedDate === dateNow
-                      ? ` Às ${formattedTime}`
-                      : ` Em ${formattedDate}`}
+                      ? ` at ${formattedTime}`
+                      : ` in ${formattedDate}`}
                   </span>
                 </footer>
               </th>
               <th className="d-table-cell w-25 text-center">
-                <span
-                  className={
-                    post.voteScore >= 0 ? "text-success" : "text-danger"
-                  }
-                >
-                  {post.voteScore}
-                </span>
-                <span className="d-block text-secondary">Score</span>
+                <div className="w-100">
+                  <VoteScore
+                    id={post.id}
+                    vote={votePost}
+                    score={post.voteScore}
+                    type={VOTE_POST}
+                    error={error}
+                    isManipulating={isManipulating}
+                  />
+                  <div>
+                    {post.commentCount === 0 && (
+                      <span className="text-secondary small">
+                        No comments yet
+                      </span>
+                    )}
+                    {post.commentCount === 1 && (
+                      <span className="text-secondary small">1 comment</span>
+                    )}
+                    {post.commentCount > 1 && (
+                      <span className="text-secondary small">
+                        {post.commentCount} comments
+                      </span>
+                    )}
+                  </div>
+                  <div>
+                    <span className="text-secondary small">
+                      {post.category.toUpperCase()}
+                    </span>
+                  </div>
+                </div>
               </th>
             </tr>
           </tbody>
@@ -69,4 +99,10 @@ class PostPreview extends Component {
   }
 }
 
-export default PostPreview;
+const mapStateToProps = (state, { post }) => ({
+  post,
+  isManipulating: post ? isManipulatingPost(state, post.id) : false,
+  error: post ? getPostError(state, post.id) : null
+});
+
+export default withRouter(connect(mapStateToProps)(PostPreview));
