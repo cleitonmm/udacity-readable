@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import PostsView from "./PostsView";
 import ListCategories from "./ListCategories";
+import ReactLoading from "react-loading";
 import {
   filterCategory,
   isFetchingCategories,
@@ -37,7 +38,7 @@ class RootView extends Component {
             </div>
           )
         ) : (
-          <div>Carregando...</div>
+          <ReactLoading type="bars" color="#222" />
         )}
       </div>
     );

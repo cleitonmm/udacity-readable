@@ -6,6 +6,7 @@ import { withRouter, Redirect } from "react-router-dom";
 import PostsView from "./PostsView";
 import { filterCategory } from "../reducers";
 import ListCategories from "./ListCategories";
+import ReactLoading from "react-loading";
 
 class CategoriesView extends Component {
   static propTypes = {
@@ -26,7 +27,7 @@ class CategoriesView extends Component {
             </div>
           ))
         ) : (
-          <div>Carregando...</div>
+          <ReactLoading type="bars" color="#222" />
         )}
       </div>
     );

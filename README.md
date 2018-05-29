@@ -1,22 +1,36 @@
-# Readable API Server
+# Projeto Readable
 
-This is the starter project for the final assessment project for Udacity's Redux course where you will build a content and comment web app. Users will be able to post content to predefined categories, comment on their posts and other users' posts, and vote on posts and comments. Users will also be able to edit and delete posts and comments.
+Projeto desenvolvido especificamente para o programa Nanodegree React da Udacity.
+Elaborado com React e Redux
 
-This repository includes the code for the backend API Server that you'll use to develop and interact with the front-end portion of the project.
+## Instalação
 
-## Start Developing
+### Backend Server
+Para instalação e uso do servidor backend, dentro da pasta `api-server`:
 
-To get started developing right away:
+* instalar todas dependências com `npm install`
+* iniciar o servidor com `node server`
 
-* Install and start the API server
-    - `cd api-server`
-    - `npm install`
-    - `node server`
-* In another terminal window, use Create React App to scaffold out the front-end
-    - `create-react-app frontend`
-    - `cd frontend`
-    - `npm start`
+### Frontend Server
+Para instalação e uso do servidor frontend, dentro da pasta `frontend`:
 
-## API Server
+* instalar todas dependências com `npm install`
+* iniciar o servidor com `npm start`
 
-Information about the API server and how to use it can be found in its [README file](api-server/README.md).
+## Como Usar
+
+### Página Inicial
+Página com acesso as postagens das categorias. É possível filtrar as postagens por categoria através dos botões superiores. Para exibir novamente todas as postagens deve clicar em "Readable".
+É possíve editar, excluir e incluir postagens através dessa visão. 
+Clicando no título da postagem será apresentado a visão de detalhes da mesma.
+
+### Postagem
+Página com informações da postagem selecionada.
+É possível editar, excluir e incluir postagem através dessa visão.
+Possibilita incluir e manutenir comentários da postagem, bem como possui sistema de votações da postagem.
+
+## Contribuição
+
+Este projeto faz parte de uma etapa para conclusão de curso e requisições provavelmente não serão aceitas.
+
+Para mais detalhes veja [CONTRIBUTING.md](CONTRIBUTING.md).

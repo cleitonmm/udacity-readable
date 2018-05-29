@@ -5,6 +5,7 @@ import { fetchPosts, fetchCategoryPosts } from "../actions";
 import * as reducers from "../reducers";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import ReactLoading from "react-loading";
 
 class PostsView extends Component {
   static propTypes = {
@@ -97,7 +98,7 @@ class PostsView extends Component {
             </div>
           )
         ) : (
-          <div>"Carregando..."</div>
+          <ReactLoading type="bars" color="#222" />
         )}
       </div>
     );

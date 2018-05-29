@@ -7,6 +7,7 @@ import { isFetchingPosts, isManipulatingPost, getPostError } from "../reducers";
 import CommentsView from "./CommentsView";
 import VoteScore from "./VoteScore";
 import EditDeletePost from "./EditDeletePost";
+import ReactLoading from "react-loading";
 
 class Post extends Component {
   static propTypes = {
@@ -81,7 +82,7 @@ class Post extends Component {
             <CommentsView postId={post.id} />
           </div>
         ) : (
-          <span>Carregando...</span>
+          <ReactLoading type="bars" color="#222" />
         )}
       </div>
     );

@@ -6,6 +6,7 @@ import { fetchPostComments, openCommentModal } from "../actions";
 import { filterComments, isFetchingComments } from "../reducers";
 import Comment from "./Comment";
 import CommentCreator from "./CommentCreator";
+import ReactLoading from "react-loading";
 
 class CommentsView extends Component {
   static propTypes = {
@@ -69,7 +70,7 @@ class CommentsView extends Component {
             <div>No comments yet.</div>
           )
         ) : (
-          <div>Carregando...</div>
+          <ReactLoading type="bars" color="#222" />
         )}
         {openCommentAdd && <CommentCreator type="ADD" postId={postId} />}
       </div>
