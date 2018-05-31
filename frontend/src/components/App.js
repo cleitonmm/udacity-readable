@@ -14,7 +14,7 @@ class App extends Component {
     fetchCategories: PropTypes.func.isRequired
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchCategories();
   }
 
