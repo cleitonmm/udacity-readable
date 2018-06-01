@@ -30,25 +30,21 @@ export const FETCH_CATEGORY_SUCCESS = "FETCH_CATEGORY_SUCCESS";
 export const FETCH_CATEGORY = "FETCH_CATEGORY";
 export const FETCH_CATEGORY_ERROR = "FETCH_CATEGORY_ERROR";
 
-export const FETCH_POST_SUCCESS = "FETCH_POST_SUCCESS";
-export const FETCH_POST = "FETCH_POST";
 export const ADD_POST = "ADD_POST";
+export const ADDING_POST = "ADDING_POST";
+export const ADDING_POST_ERROR = "ADDING_POST_ERROR";
 export const DELETE_POST = "DELETE_POST";
-export const FETCH_POST_ERROR = "FETCH_POST_ERROR";
 export const MANIPULATE_POST = "MANIPULATE_POST";
 export const MANIPULATE_POST_ERROR = "MANIPULATE_POST_ERROR";
-export const MANIPULATE_POST_SUCCESS = "MANIPULATE_POST_SUCCESS";
 export const VOTE_POST = "VOTE_POST";
 export const OPEN_POST_MODAL = "OPEN_POST_MODAL";
 
-export const FETCH_COMMENT_SUCCESS = "FETCH_COMMENTS_SUCCESS";
-export const FETCH_COMMENT = "FETCH_COMMENTS";
 export const ADD_COMMENT = "ADD_COMMENT";
+export const ADDING_COMMENT = "ADDING_COMMENT";
+export const ADDING_COMMENT_ERROR = "ADDING_COMMENT_ERROR";
 export const DELETE_COMMENT = "DELETE_COMMENT";
-export const FETCH_COMMENT_ERROR = "FETCH_COMMENT_ERROR";
 export const MANIPULATE_COMMENT = "MANIPULATE_COMMENT";
 export const MANIPULATE_COMMENT_ERROR = "MANIPULATE_COMMENT_ERROR";
-export const MANIPULATE_COMMENT_SUCCESS = "MANIPULATE_COMMENT_SUCCESS";
 export const VOTE_COMMENT = "VOTE_COMMENT";
 export const OPEN_COMMENT_MODAL = "OPEN_COMMENT_MODAL";
 
@@ -64,14 +60,14 @@ const IS_MANIPULATING_POST_MESSAGE =
   "Já há uma requisição de alteração de postagem em andamento.";
 
 const fetchPostSuccess = (posts, postSchema = schema.posts) => ({
-  type: FETCH_POST_SUCCESS,
+  type: ADD_POST,
   posts: normalize(posts, postSchema)
 });
 
 const fetchCommentSuccess = (
   comments,
   postSchema = schema.comments,
-  type = FETCH_COMMENT_SUCCESS
+  type = ADD_COMMENT
 ) => ({
   type,
   comments: normalize(comments, postSchema)
@@ -104,10 +100,10 @@ export const fetchPosts = () => (dispatch, getState) => {
     return Promise.resolve();
   }
 
-  dispatch({ type: FETCH_POST });
+  dispatch({ type: ADDING_POST });
   return getPosts().then(
     posts => dispatch(fetchPostSuccess(posts)),
-    error => dispatch({ type: FETCH_POST_ERROR, error: error.message })
+    error => dispatch({ type: ADDING_POST_ERROR, error: error.message })
   );
 };
 
@@ -117,10 +113,10 @@ export const fetchCategoryPosts = category => (dispatch, getState) => {
     return Promise.resolve();
   }
 
-  dispatch({ type: FETCH_POST });
+  dispatch({ type: ADDING_POST });
   return getCategoryPosts(category).then(
     posts => dispatch(fetchPostSuccess(posts)),
-    error => dispatch({ type: FETCH_POST_ERROR, error: error.message })
+    error => dispatch({ type: ADDING_POST_ERROR, error: error.message })
   );
 };
 
@@ -130,13 +126,13 @@ export const fetchPost = id => (dispatch, getState) => {
     return Promise.resolve();
   }
 
-  dispatch({ type: FETCH_POST });
+  dispatch({ type: ADDING_POST });
   return getPost(id).then(
     post => {
-      if (post.error || Object.keys(post).length === 0) dispatch({ type: FETCH_POST_ERROR, error: "Therer was a error fetching post" });
+      if (post.error || Object.keys(post).length === 0) dispatch({ type: ADDING_POST_ERROR, error: "Therer was a error fetching post" });
       else dispatch(fetchPostSuccess(post, schema.post));
     },
-    error => dispatch({ type: FETCH_POST_ERROR, error: error.message })
+    error => dispatch({ type: ADDING_POST_ERROR, error: error.message })
   );
 };
 
@@ -146,10 +142,10 @@ export const fetchPostComments = id => (dispatch, getState) => {
     return Promise.resolve();
   }
 
-  dispatch({ type: FETCH_COMMENT });
+  dispatch({ type: ADDING_COMMENT });
   return getPostComments(id).then(
     comments => dispatch(fetchCommentSuccess(comments)),
-    error => dispatch({ type: FETCH_COMMENT_ERROR, error: error.message })
+    error => dispatch({ type: ADDING_COMMENT_ERROR, error: error.message })
   );
 };
 
@@ -188,7 +184,7 @@ export const voteComment = (id, option) => (dispatch, getState) => {
   dispatch({ type: MANIPULATE_COMMENT, comment });
   return postCommentVote(id, option).then(
     res => {
-      dispatch({ type: MANIPULATE_COMMENT_SUCCESS, comment });
+      dispatch({ type: ADD_COMMENT, comment });
     },
     error => {
       dispatch({
@@ -211,7 +207,7 @@ export const votePost = (id, option) => (dispatch, getState) => {
   dispatch({ type: MANIPULATE_POST, post });
   return postPostVote(id, option).then(
     res => {
-      dispatch({ type: MANIPULATE_POST_SUCCESS, post });
+      dispatch({ type: ADD_POST, post });
     },
     error => {
       dispatch({
@@ -240,7 +236,6 @@ export const editComment = (id, body) => (dispatch, getState) => {
 
   return putComment(id, body).then(
     comment => {
-      dispatch({ type: MANIPULATE_COMMENT_SUCCESS, comment });
       dispatch({ type: ADD_COMMENT, comment });
       openCommentModal()(dispatch);
     },
@@ -266,7 +261,6 @@ export const delComment = id => (dispatch, getState) => {
 
   return deleteComment(id).then(
     res => {
-      dispatch({ type: MANIPULATE_COMMENT_SUCCESS, comment });
       dispatch({ type: DELETE_COMMENT, comment });
       openCommentModal()(dispatch);
     },
@@ -286,17 +280,16 @@ export const addComment = comment => (dispatch, getState) => {
     return Promise.resolve();
   }
 
-  dispatch({ type: FETCH_COMMENT });
+  dispatch({ type: ADDING_COMMENT });
 
   return postComment(comment).then(
     comment => {
-      dispatch({ type: FETCH_COMMENT_SUCCESS });
       dispatch({ type: ADD_COMMENT, comment });
       openCommentModal()(dispatch);
     },
     error => {
       dispatch({
-        type: FETCH_COMMENT_ERROR,
+        type: ADDING_COMMENT_ERROR,
         error: error.message
       });
     }
@@ -315,7 +308,6 @@ export const editPost = (id, title, body) => (dispatch, getState) => {
 
   return putPost(id, title, body).then(
     post => {
-      dispatch({ type: MANIPULATE_POST_SUCCESS, post });
       dispatch({ type: ADD_POST, post });
       openPostModal()(dispatch);
     },
@@ -341,7 +333,6 @@ export const delPost = id => (dispatch, getState) => {
 
   return deletePost(id).then(
     res => {
-      dispatch({ type: MANIPULATE_POST_SUCCESS, post });
       dispatch({ type: DELETE_POST, post, error: "Post deleted." });
       openPostModal()(dispatch);
     },
@@ -361,17 +352,16 @@ export const addPost = post => (dispatch, getState) => {
     return Promise.resolve();
   }
 
-  dispatch({ type: FETCH_POST });
+  dispatch({ type: ADDING_POST });
 
   return postPost(post).then(
     post => {
-      dispatch({ type: FETCH_POST_SUCCESS });
       dispatch({ type: ADD_POST, post });
       openPostModal(post)(dispatch);
     },
     error => {
       dispatch({
-        type: FETCH_POST_ERROR,
+        type: ADDING_POST_ERROR,
         error: error.message
       });
     }

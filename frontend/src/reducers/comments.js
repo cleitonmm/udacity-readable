@@ -1,34 +1,31 @@
 import {
   ADD_COMMENT,
+  ADDING_COMMENT,
   DELETE_COMMENT,
-  FETCH_COMMENT_SUCCESS,
-  FETCH_COMMENT,
-  FETCH_COMMENT_ERROR,
   MANIPULATE_COMMENT,
   MANIPULATE_COMMENT_ERROR,
-  MANIPULATE_COMMENT_SUCCESS,
-  OPEN_COMMENT_MODAL
+  OPEN_COMMENT_MODAL,
+  ADDING_COMMENT_ERROR
 } from "../actions";
 import { combineReducers } from "redux";
 
 const byIds = (state = {}, action) => {
-  if (action.comments) {
-    return {
-      ...action.comments.entities.comment
-    };
-  }
-
   let { comment } = action;
   switch (action.type) {
     case ADD_COMMENT:
-      return {
-        ...state,
-        [comment.id]: {
-          ...comment,
-          isManipulating: false,
-          errorMessage: null
-        }
-      };
+      if (action.comments)
+        return {
+          ...action.comments.entities.comment
+        };
+      else
+        return {
+          ...state,
+          [comment.id]: {
+            ...comment,
+            isManipulating: false,
+            errorMessage: null
+          }
+        };
     case DELETE_COMMENT:
       let newState = state;
       delete newState[comment.id];
@@ -51,16 +48,6 @@ const byIds = (state = {}, action) => {
           errorMessage: action.error
         }
       };
-    case MANIPULATE_COMMENT_SUCCESS:
-      return {
-        ...state,
-        [comment.id]: {
-          ...comment,
-          isManipulating: false,
-          errorMessage: null
-        }
-      };
-
     default:
       return state;
   }
@@ -68,10 +55,10 @@ const byIds = (state = {}, action) => {
 
 const isFetching = (state = false, action) => {
   switch (action.type) {
-    case FETCH_COMMENT_SUCCESS:
-    case FETCH_COMMENT_ERROR:
+    case ADD_COMMENT:
+    case ADDING_COMMENT_ERROR:
       return false;
-    case FETCH_COMMENT:
+    case ADDING_COMMENT:
       return true;
     default:
       return state;
@@ -80,10 +67,10 @@ const isFetching = (state = false, action) => {
 
 const errorMessage = (state = null, action) => {
   switch (action.type) {
-    case FETCH_COMMENT:
-    case FETCH_COMMENT_SUCCESS:
+    case ADDING_COMMENT:
+    case ADD_COMMENT:
       return null;
-    case FETCH_COMMENT_ERROR:
+    case ADDING_COMMENT_ERROR:
       return action.error || "Erro indefinido ao carregar coment[arios.";
     default:
       return state;
