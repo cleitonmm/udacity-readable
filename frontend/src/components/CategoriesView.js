@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { fetchCategoryPosts } from "../actions";
 import { withRouter, Redirect } from "react-router-dom";
 import PostsView from "./PostsView";
-import { filterCategory } from "../reducers";
+import { getAllCategories } from "../reducers";
 import ListCategories from "./ListCategories";
 import ReactLoading from "react-loading";
 
@@ -34,13 +34,15 @@ class CategoriesView extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => ({
-  category: filterCategory(
-    state,
-    ownProps.match.params.path ? ownProps.match.params.path : "none"
-  ),
-  categories: filterCategory(state)
-});
+const mapStateToProps = (state, ownProps) => {
+  const path = ownProps.match.params.path ? ownProps.match.params.path : "none";
+  const categories = getAllCategories(state);
+  const category = categories.filter(category => category.path === path);
+  return {
+    category,
+    categories
+  };
+};
 
 export default withRouter(
   connect(mapStateToProps, { fetchCategoryPosts })(CategoriesView)

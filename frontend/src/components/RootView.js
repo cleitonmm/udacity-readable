@@ -5,7 +5,7 @@ import PostsView from "./PostsView";
 import ListCategories from "./ListCategories";
 import ReactLoading from "react-loading";
 import {
-  filterCategory,
+  getAllCategories,
   isFetchingCategories,
   getCategoriesError
 } from "../reducers";
@@ -46,7 +46,7 @@ class RootView extends Component {
 }
 
 const mapStateToProps = state => ({
-  categories: filterCategory(state),
+  categories: getAllCategories(state),
   isFetching: isFetchingCategories(state),
   fetchError: getCategoriesError(state)
 });

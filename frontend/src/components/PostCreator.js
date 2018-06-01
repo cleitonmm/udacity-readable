@@ -3,7 +3,7 @@ import { editPost, delPost, addPost, openPostModal } from "../actions";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { filterCategory } from "../reducers";
+import { getAllCategories } from "../reducers";
 import Modal from "react-modal";
 import {
   ButtonDropdown,
@@ -252,7 +252,7 @@ class PostCreator extends Component {
 }
 
 const mapStateToProps = state => ({
-  categories: filterCategory(state)
+  categories: getAllCategories(state)
 });
 
 export default withRouter(
