@@ -118,8 +118,6 @@ export const getPostError = (state, id) => state.posts.byIds[id].errorMessage;
 export const filterPost = (state, category, id, deleted = false) => {
   let posts = getAllPosts(state);
 
-  if (!deleted) posts = posts.filter(post => post.deleted === false);
-
   if (id) posts = posts.filter(post => post.id === id)[0];
   else if (category) posts = posts.filter(post => post.category === category);
 

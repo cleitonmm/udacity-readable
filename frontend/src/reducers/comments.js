@@ -117,9 +117,6 @@ export const getCommentError = (state, id) =>
 export const filterComments = (state, postId, id, deleted = false) => {
   let comments = getAllComments(state);
 
-  if (!deleted)
-    comments = comments.filter(comment => comment.deleted === false);
-
   if (id) comments = comments.filter(comment => comment.id === id)[0];
   else if (postId)
     comments = comments.filter(comment => comment.parentId === postId);
