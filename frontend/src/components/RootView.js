@@ -25,21 +25,19 @@ class RootView extends Component {
     const { categories, isFetching, fetchError } = this.props;
     return (
       <div className="root-view">
-        {!isFetching ? (
-          !fetchError ? (
+        {isFetching && <ReactLoading type="bars" color="#222" />}
+        {(!isFetching && !fetchError) && (
             <div>
             <ListCategories cats={categories} />
             <PostsView />
             </div>
-          ) : (
+          )} 
+          {(!isFetching && fetchError) && (
             <div>
               <span>Ops... something went wrong!</span>
               {console.log(fetchError)}
             </div>
-          )
-        ) : (
-          <ReactLoading type="bars" color="#222" />
-        )}
+          )}
       </div>
     );
   }

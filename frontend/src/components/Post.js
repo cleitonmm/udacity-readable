@@ -8,6 +8,7 @@ import CommentsView from "./CommentsView";
 import VoteScore from "./VoteScore";
 import EditDeletePost from "./EditDeletePost";
 import ReactLoading from "react-loading";
+import Page404 from "./Page404";
 
 class Post extends Component {
   static propTypes = {
@@ -26,7 +27,7 @@ class Post extends Component {
   render() {
     const { post, error, fetchError, isManipulating, isFetching } = this.props;
 
-    if (fetchError) return <Redirect to="/" />;
+    if (fetchError) return <Page404 />;
 
     let formattedDate = "";
     let formattedTime = "";

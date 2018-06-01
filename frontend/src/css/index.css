@@ -10,6 +10,11 @@ body {
   margin: 0 auto;
 }
 
+video {
+  width: 100%;
+  height: auto;
+}
+
 .header {
   max-height: 40px;
   height: 40px;
